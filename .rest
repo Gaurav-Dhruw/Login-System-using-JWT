@@ -1,14 +1,19 @@
 ###
 
-POST http://localhost:8000/api/signup
+POST http://localhost:5000/api/signup
 
 content-type: application/json
 
 {
     "user_name":"Gaurav",
-    "email":"example@email.com",
+    "email":"dhruwgaurav01@gmail.com",
     "password": "password"
 }
 
 ###
 GET http://localhost:8000
+
+
+###
+
+GET http://localhost:5000/api/verify/4e64b52d1f87e6e5bad0b62a2c523b8f
