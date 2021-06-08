@@ -1,31 +1,47 @@
 import React,{Fragment, useState} from 'react'
 import axios from "axios";
 import Fade from "react-reveal/Fade";
+import Alert from 'react-bootstrap/Alert';
+
 import { validate} from '../assets/js/validate';
 
 
 
 function Login(props) {
-	const [validation,setValidation]= useState({user_name:false,email:false,password:false});
-	const [warning,setWarning]= useState({user_name:false,email:false,password:false})
-    const [show,setShow]= useState({show:false});
+	const [validation,setValidation]= useState({email:false,password:false});
+	const [warning,setWarning]= useState({email:false,password:false})
+    const [alert,setAlert]= useState({show:false,variant:"danger"});
     const [userData,setUserData]= useState({});
 
 	const submit= (e)=>{
 		e.preventDefault();
 
-		validate(userData,validation,setValidation);
-		setWarning({user_name:!validation.user_name,email: !validation.email, password:!validation.password })
+		let loginData = {email:userData.email,loginPassword:userData.password};
+		validate(loginData,validation,setValidation);
+		
+		
+			setWarning({email: !validation.email,password:!validation.password})
 
-		if(validation.email===true&& validation.user_name===true&& validation.password===true){
+		
+		// setWarning({email: !validation.email,password:!validation.password})
+		
+		if(validation.email===true&& validation.password===true){
 		
 			axios.post("/api/login",userData)
 			.then(res=>{
 	
 				console.log(res)
-				setShow({show:true})
+				if(res.data.authentication){
+
+				}
+				
+				else
+				setAlert({...alert,show:true,message:"password is incorrect"})
 			})
-			.catch(err=>console.log(err))
+			.catch(err=>{
+				setAlert({...alert,show:true,message:"Email is not registered"})
+
+		})
 		}
 		
 		}
@@ -36,7 +52,7 @@ function Login(props) {
     }
     return (
         <div>
-
+{console.log(validation,"warning", warning)}
 <div class="signup-form">
 				
     <form >
@@ -54,7 +70,7 @@ function Login(props) {
 			</div>
 			<Fade  duration={500} top when={warning.email}>
 
-				<div className="warning">server message</div>
+				<div className="warning">enter a valid email</div>
 				</Fade>
         </div>
        
@@ -69,7 +85,7 @@ function Login(props) {
 			</div>
 			<Fade duration={500} top when={warning.password}>
 
-				<div className="warning">server message</div>
+				<div className="warning">required</div>
 				</Fade>
         </div>
 		
@@ -77,6 +93,12 @@ function Login(props) {
 		<div class="form-group">
             <button type="submit" onClick={submit} class="btn btn-primary btn-lg">Login</button>
         </div>
+		<div className="status-container">
+
+		<Alert transition={true} show={alert.show} variant={alert.variant}>
+								{alert.message}
+							</Alert>
+		</div>
     </form>
 	<div class="text-center"><button className=" switchBtn" onClick={props.handleSwitch}>Create Account</button></div>
 </div>

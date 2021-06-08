@@ -14,8 +14,8 @@ body {
 }
 .signup-form {
 	width: 400px;
-	margin: 0 auto;
-	padding: 30px 0;		
+	margin: 0px auto;
+	padding: 80px 0;		
 }
 .signup-form form {
 	color: #999;
@@ -115,6 +115,72 @@ body {
 
 .status-container{
 	margin-top: 30px;
-	min-height: 8vh;
+	/* min-height: 8vh; */
 	
+}
+
+
+/* NAVBAR */
+
+.navbar{
+	position: absolute;
+	width: 100%;
+	display: flex;
+	justify-content: space-between;
+	padding:5px 50px;
+	background: transparent !important ;
+}
+.nav-item{
+	margin:0 10px;
+}
+
+
+.navbar-brand{
+	font-size: 1.8rem !important;
+}
+.navbar-nav{
+	flex-direction: row;
+}
+
+.signup-btn{
+	border-radius: 5px;
+	display: flex;
+	width: 110px;
+	justify-content: space-between;
+	align-items: center;
+}
+
+
+/* Main Section */
+.main-section{
+	height: 100vh;
+	padding: 10vh 20vh;
+}
+.header{
+	display: flex;
+	justify-content: center;
+	margin-top:30vh;
+}
+
+.desc-cont{
+	display: flex;
+	width: 80%;
+	margin:auto;
+	justify-content: center;
+	margin-top:30px;
+}
+
+.desc-cont p, .header h1{
+	text-align: center;
+}
+
+
+/* Verify */
+
+.verify-cont{
+	display: flex;
+	width: 100%;
+	height: 100vh;
+	justify-content: center;
+	align-items: center;
 }

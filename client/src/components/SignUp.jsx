@@ -9,7 +9,7 @@ import { validate } from '../assets/js/validate';
 function SignUp(props) {
 	const [validation, setValidation] = useState({ user_name: false, email: false, password: false });
 	const [warning, setWarning] = useState({ user_name: false, email: false, password: false });
-	const [status, setStatus] = useState({ loading: false, variant: "light", show: true, statusMessage: "Provided email will be verfied" });
+	const [status, setStatus] = useState({ loading: false, variant: "light", show:false });
 
 	const [userData, setUserData] = useState({});
 
@@ -27,11 +27,22 @@ function SignUp(props) {
 			axios.post("/api/signup", userData)
 				.then(res => {
 					console.log(res)
-					setStatus({ loading: false, show: true, variant: "success", statusMessage: "email sent" })
+					
+					
+
+					if(res.data.message){
+						setStatus({ loading: false, show: true, variant: "danger", statusMessage: res.data.message })
+					}
+
+					else{
+						setStatus({ loading: false, show: true, variant: "success", statusMessage:"Email has been sent. Verify it to continue"})
+					}
+
+					
 				})
 				.catch(err => {
 					console.log(err)
-					setStatus({ loading: false, show: true, variant: "danger", statusMessage: "ERROR occured" })
+					
 				})
 
 		}
@@ -95,7 +106,7 @@ function SignUp(props) {
 							<div className="warning">min 8 char, must contain number and special character </div>
 						</Fade>
 					</div>
-					<div class="form-group">
+					{/* <div class="form-group">
 						<div class="input-group">
 							<div class="input-group-prepend">
 								<span class="input-group-text">
@@ -105,7 +116,7 @@ function SignUp(props) {
 							</div>
 							<input type="text" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required" />
 						</div>
-					</div>
+					</div> */}
 
 					<div class="form-group">
 						<button type="submit" onClick={submit} class="btn btn-primary btn-lg">Sign Up</button>
