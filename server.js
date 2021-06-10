@@ -5,10 +5,15 @@ const path =require("path")
 require("dotenv").config();
 const authRoute = require("./routes/auth.route");
 const { verifyEmail, addNewUser, autherization} = require("./middlewares/auth.js");
+const pug =  require( "pug");
+
 
 
 const app= express();
 
+
+app.set("views",path.resolve(__dirname,"views"));
+app.set("view engine","pug")
 app.use(express.json());
 app.use(cors());
 
@@ -16,6 +21,12 @@ app.use("/api/protected",autherization);
 
 app.use("/api/signup",[addNewUser,verifyEmail]);
 app.use('/api', authRoute);
+
+const file=pug.renderFile(path.resolve(__dirname,"views","email.pug"),{verification_link:"#"});
+
+app.get("/pug",(req,res)=>{
+    res.render("email",{verification_link:"#"});
+})
 
 const port= process.env.PORT || 5000;
 

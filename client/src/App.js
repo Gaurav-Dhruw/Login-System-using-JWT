@@ -6,6 +6,7 @@ import Fade from "react-reveal/Fade"
 import Main from "./components/Main";
 import Navbar from  "./components/Navbar";
 import Verify from "./components/Verify";
+import Account from "./components/Account"
 
 
 function App() {
@@ -18,6 +19,12 @@ function App() {
   return (
   <Router>
     <Switch>
+
+    <Route path="/account">
+    <Account/>
+
+
+    </Route>
   
     <Route path="/verify">
     <Verify/>

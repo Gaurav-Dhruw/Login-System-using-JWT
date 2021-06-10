@@ -1,12 +1,23 @@
 import axios from 'axios';
-import React , {useState, useEffect}from 'react'
+import React , {useState, useEffect}from 'react';
+import {useLocation} from "react-router-dom";
+import Cookies from "universal-cookie"
 
 function Verify() {
     const[state,setState]= useState({loading:true});
-
+    const location =useLocation();
+    const cookies = new Cookies()
     useEffect(() => {
-      axios.get("/api/verify/adda570046e91da9fc53d5f08d4028d0").then(res=>{
-        console.log(res)
+      console.log(location);
+      axios.get(`/api${location.pathname}`).then(res=>{
+        console.log(res);
+        if(res.data.verified===true){
+
+          cookies.set("refresh_token",res.data.refresh_token, {path:"/", expires: new Date(new Date().getTime + 2*60*1000)});
+          cookies.set("access_token",res.data.access_token, {path:"/", expires: new Date(new Date().getTime + 1*60*1000)});
+        }
+        
+
       }).catch(err=>{
         console.log(err)
       })

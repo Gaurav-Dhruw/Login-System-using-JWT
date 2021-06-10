@@ -19,6 +19,7 @@ router.post("/signup", (req, res) => {
 
 router.get("/verify/:verification_token", async (req, res) => {
     const verification_token = req.params.verification_token;
+    console.log(verification_token);
     const result =await User.findOneAndUpdate({ verification_token }, { verified: true});
     console.log(result);
    

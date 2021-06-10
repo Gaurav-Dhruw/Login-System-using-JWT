@@ -4,6 +4,13 @@ const nodemailer = require("nodemailer");
 const User = require("../models/User");
 const crypto = require("crypto");
 const { google } = require("googleapis");
+const pug =require("pug");
+const path = require("path");
+
+const express = require("express");
+const app= express();
+
+console.log(app.get("views"));
 
 const authentication = async (req, res, next) => {
     console.log(req.body)
@@ -14,20 +21,25 @@ const authentication = async (req, res, next) => {
 
         const result = await User.findOne({ email: email });
         const authentication = await bcrypt.compare(password, result.password);
-        if(authentication){
-            const payload = {user_name:result.user_name, email: result.email}
-        console.log(result);
-        const access_token=jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '10m' });
-        const refresh_token=jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET,{ expiresIn: '1h' });
-        return res.status(200).json({ authentication, refresh_token, access_token })
-        }
+        if(result.verified){
 
-        return res.status(200).json({ authentication })
+            if(authentication){
+                const payload = {user_name:result.user_name, email: result.email}
+            console.log(result);
+            const access_token=jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '10m' });
+            const refresh_token=jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET,{ expiresIn: '1h' });
+            return res.status(200).json({user_data:payload, refresh_token, access_token })
+            }
+    
+            return res.status(403).json({error:"Password is Incorrect"})
+
+        }
+        return res.status(401).json({error:"This email is not yet verified"});
 
     } 
 
     catch (err) {
-        res.status(404).send();
+        res.status(404).json({error:"Email is not registered"});
     }
 
     next();
@@ -44,7 +56,7 @@ const verifyEmail = async (req, res, next) => {
     const user = req.body;
 
 
-    const verification_link = req.protocol + '://' + req.get('host') + "/verfiy/" + req.verification_token;
+    const verification_link = req.protocol + '://' + req.get('host') + "/verify/" + req.verification_token;
 
 
     const accessToken = await oAuth2Client.getAccessToken();
@@ -53,7 +65,7 @@ const verifyEmail = async (req, res, next) => {
         auth: {
             type: "OAuth2",
             user: "webapp.test.0506@gmail.com",
-            pass: "gaurav97@gmail",
+            pass: process.env.EMAIL_PASSWORD,
             clientId: process.env.CLIENT_ID,
             clientSecret: process.env.CLIENT_SECRET,
             refreshToken: process.env.REFRESH_TOKEN,
@@ -61,11 +73,14 @@ const verifyEmail = async (req, res, next) => {
 
         }
     });
+    const emailHtml=  pug.renderFile(path.resolve(app.get("views"),"email.pug"),{verification_link});
+    console.log(emailHtml)
+
     const mailOption = {
         from: '"Verification" <webapp.test.0506@gmail.com>',
         to: user.email,
         subject: "email verfication",
-        // html: emailHtml
+        html: emailHtml
     }
 
     transporter.sendMail(mailOption)
