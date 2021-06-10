@@ -6,7 +6,52 @@ import Fade from "react-reveal/Fade"
 import Main from "./components/Main";
 import Navbar from  "./components/Navbar";
 import Verify from "./components/Verify";
-import Account from "./components/Account"
+import Account from "./components/Account";
+import axios from "axios";
+import Cookies from "universal-cookie";
+
+
+const cookies = new Cookies;
+
+
+axios.interceptors.response.use(response=>{
+  console.log(response);
+  return response;
+},async error=>{
+  console.log(error.response);
+  if(error.response.status===401 && cookies.get("refresh_token")){
+
+    try{
+      const res = await axios.get("/api/gen/accesstoken");
+      
+        cookies.set("access_token", res.data.access_token, { path: "/", expires: new Date(new Date().getTime + 1 * 60 * 1000) });
+
+        // const {url, method}= error.response.config;
+        
+        const retryRequest = await axios({...error.response.config});
+
+    }
+    catch(err){
+      console.log(err)
+      throw err;
+    }
+
+
+
+    
+  }
+  throw error;
+})
+
+
+
+axios.interceptors.request.use(request=>{
+  if(cookies.get("refresh_token")){
+    
+    request.headers.Authorization= `Bearer ${cookies.get("access_token")}`;
+  }
+  return request;
+})
 
 
 function App() {

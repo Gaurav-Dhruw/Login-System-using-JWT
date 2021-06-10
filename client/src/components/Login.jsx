@@ -61,7 +61,7 @@ function Login(props) {
 	}
 	return (
 		<div>
-			{console.log(validation, "warning", warning)}
+			{/* {console.log(validation, "warning", warning)} */}
 			<div class="signup-form">
 
 				<form >

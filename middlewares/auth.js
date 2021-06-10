@@ -130,7 +130,7 @@ const addNewUser = async (req, res, next) => {
 }
 
 const autherization=(req,res,next)=>{
-    const access_token= req.headers.Auhtherization.split(" ")[1];
+    const access_token= req.headers.Authorization.split(" ")[1];
     jwt.verify(access_token,process.env.ACCESS_TOKEN_SECRET,(err,payload)=>{
         if(err) return res.send(401);
         next()    
