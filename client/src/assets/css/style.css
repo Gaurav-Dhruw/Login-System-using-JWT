@@ -1,6 +1,7 @@
 body {
 	color: #fff;
 	background: #19aa8d;
+	/* background: #19aa8da6; */
 	font-family: 'Roboto', sans-serif;
 }
 .form-control {
@@ -124,14 +125,17 @@ body {
 
 .navbar{
 	position: absolute;
+	top:0;
 	width: 100%;
 	display: flex;
 	justify-content: space-between;
-	padding:5px 50px;
+	padding:5px 70px;
 	background: transparent !important ;
 }
 .nav-item{
-	margin:0 10px;
+	/* margin:0 10px; */
+	display: flex;
+	align-items: center;
 }
 
 
@@ -145,9 +149,39 @@ body {
 .signup-btn{
 	border-radius: 5px;
 	display: flex;
-	width: 110px;
+	min-width: 115px;
 	justify-content: space-between;
 	align-items: center;
+}
+
+.login-btn{
+	border-radius: 5px;
+	display: flex;
+	min-width: 100px;
+	justify-content: space-between;
+	align-items: center;
+}
+
+
+.dropdown-toggle::after{
+	display: none !important;
+}
+.dropdown-toggle{
+	color: rgb(255, 255, 255) !important;
+	/* margin: 10px; */
+	font-weight: normal;
+	border: 1px solid transparent;
+    padding: .375rem .75rem;
+    font-size: 1.2rem;
+    line-height: 1.5;
+	text-align: center;
+    vertical-align: middle;
+	border-radius: 5px;
+    display: flex;
+    min-width: 120px;
+    justify-content: space-between;
+    align-items: center;
+
 }
 
 
@@ -159,7 +193,7 @@ body {
 .header{
 	display: flex;
 	justify-content: center;
-	margin-top:30vh;
+	margin-top:25vh;
 }
 
 .desc-cont{
@@ -174,6 +208,26 @@ body {
 	text-align: center;
 }
 
+.get-started{
+	display: flex;
+	width: 80%;
+	margin:auto;
+	justify-content: center;
+	margin-top:30px;
+}
+
+.get-started button{
+	border-radius: 5px;
+	display: flex;
+	min-width: 100px;
+	justify-content: space-between;
+	align-items: center;
+}
+
+a{
+	text-decoration: none !important;
+}
+
 
 /* Verify */
 
@@ -183,4 +237,94 @@ body {
 	height: 100vh;
 	justify-content: center;
 	align-items: center;
+}
+
+/* Account */
+
+.account{
+	margin-top:80px;
+
+
+}
+
+.account-header{
+	
+	display: flex;
+	justify-content: center;
+	padding-bottom:20px
+}
+
+.account-header h2{
+	border-bottom: 3px solid white;
+	border-radius: 3px;
+	padding: 0 7px
+}
+
+.btn{
+	margin:10px
+}
+
+.btn-container{
+	display: flex;
+	flex-direction: column;
+	/* align-items: center; */
+	width: 30%;
+}
+
+.display{
+	background: rgb(226, 219, 219);
+	color:rgb(61, 57, 57);
+	width: 55%;
+    border-radius: 5px;
+	padding:20px;
+	display: flex;
+	justify-content: space-between;
+	min-height: 55vh;
+	margin:50px auto;
+
+}
+.display-area{
+	width: 70%;
+	
+}
+
+.account-container{
+	position:absolute !important;
+	height: 49% !important;
+	width: 37% !important;
+	display: flex;
+	width: 100%;
+	justify-content: center;
+	align-items: center;
+}
+.password-form{
+	padding:30px 0;
+	position:absolute !important;
+	width: 37% !important;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.password-form input, .password-form input:active{
+	padding: 5px 15px;
+    margin-bottom: 20px;
+    outline: none;
+    border-radius: 4px;
+	border-color: rgba(75, 72, 72, 0.466);
+}
+
+.delete-container{
+	padding:30px 0;
+	position:absolute !important;
+	width: 37% !important;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.account-details{
+	width: 75%;
+    height: 100%;
+    padding: 30px;
 }

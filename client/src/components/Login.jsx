@@ -3,7 +3,7 @@ import axios from "axios";
 import Fade from "react-reveal/Fade";
 import Alert from 'react-bootstrap/Alert';
 import {useHistory} from "react-router-dom"
-import cookies from "universal-cookie"
+import Cookies from "universal-cookie";
 
 import { validate } from '../assets/js/validate';
 
@@ -15,6 +15,10 @@ function Login(props) {
 	const [warning, setWarning] = useState({ email: false, password: false })
 	const [alert, setAlert] = useState({ show: false, variant: "danger" });
 	const [userData, setUserData] = useState({});
+	const cookies = new Cookies();
+
+
+
 
 	const submit = (e) => {
 		e.preventDefault();
@@ -34,14 +38,14 @@ function Login(props) {
 
 					console.log(res)
 
-					cookies.set("refresh_token", res.data.refresh_token, { path: "/", expires: new Date(new Date().getTime + 2 * 60 * 1000) });
-					cookies.set("access_token", res.data.access_token, { path: "/", expires: new Date(new Date().getTime + 1 * 60 * 1000) });
+					cookies.set("refresh_token", res.data.refresh_token, { path: "/", expires: new Date(new Date().getTime() + 1 * 3600 * 1000) });
+					cookies.set("access_token", res.data.access_token, { path: "/", expires: new Date(new Date().getTime() + 10 * 60 * 1000) });
 					history.push("/account")
 
 					
 				})
 				.catch(err => {
-					console.log(err.response.data);
+					console.log(err);
 					
 					console.log(err.response.status);
 

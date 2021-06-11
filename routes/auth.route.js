@@ -21,13 +21,13 @@ router.get("/verify/:verification_token", async (req, res) => {
     const verification_token = req.params.verification_token;
     console.log(verification_token);
     const result =await User.findOneAndUpdate({ verification_token }, { verified: true});
-    console.log(result);
+    // console.log(result);
    
+    console.log(result)
     if(result) {
-        
        
         const payload = {user_name:result.user_name, email: result.email}
-        console.log(result);
+        // console.log(result);
         const access_token=jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '10m' });
         const refresh_token=jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET,{ expiresIn: '1h' });
 

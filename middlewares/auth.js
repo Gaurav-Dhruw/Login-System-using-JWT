@@ -10,8 +10,7 @@ const path = require("path");
 const express = require("express");
 const app= express();
 
-console.log(app.get("views"));
-
+//To verify user and password during login
 const authentication = async (req, res, next) => {
     console.log(req.body)
     const { email, password } = req.body;
@@ -45,11 +44,12 @@ const authentication = async (req, res, next) => {
     next();
 }
 
-
+// OAUTH2 setup for using gmail 
 const oAuth2Client = new google.auth.OAuth2(process.env.CLIENT_ID, process.env.CLIENT_SECRET, process.env.REDIRECT_URI)
 oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN })
 
 
+// Sends an email with verification link
 const verifyEmail = async (req, res, next) => {
     console.log("inside verify email")
 
@@ -98,6 +98,7 @@ const verifyEmail = async (req, res, next) => {
 
 }
 
+// Add new user to DB
 const addNewUser = async (req, res, next) => {
 
     const { user_name, email, password } = req.body;
@@ -129,13 +130,31 @@ const addNewUser = async (req, res, next) => {
         })
 }
 
+
+// Check for access token to provide further access to procted links;
 const autherization=(req,res,next)=>{
     const access_token= req.headers.Authorization.split(" ")[1];
     jwt.verify(access_token,process.env.ACCESS_TOKEN_SECRET,(err,payload)=>{
         if(err) return res.send(401);
-        next()    
+        req.payload= payload;
+        next();    
     })
 }
+
+// generate acces token 
+const genAccessToken=(req,res,next)=>{
+    const refresh_token= req.body.refresh_token;
+    jwt.verify(refresh_token,process.env.REFRESH_TOKEN_SECRET,(err,payload)=>{
+        if(payload){
+            const access_token=jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '10m' });
+            res.status(200).json({access_token})
+        }
+        next();
+})
+}
+
+
+
 
 // const checkRegistration = async (req, res, next) => {
 //     console.log("inside check reg")
@@ -154,27 +173,6 @@ const autherization=(req,res,next)=>{
 
 
 // }
-
-
-const genAccessToken=(req,res,next)=>{
-    const refresh_token= req.body.refresh_token;
-    jwt.verify(refresh_token,process.env.REFRESH_TOKEN_SECRET,(err,payload)=>{
-        if(payload){
-            const access_token=jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '10m' });
-            res.status(200).json({access_token})
-        }
-        next();
-})
-}
-
-
-
-
-
-
-
-
-
 
 
 

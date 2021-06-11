@@ -7,6 +7,7 @@ import Main from "./components/Main";
 import Navbar from  "./components/Navbar";
 import Verify from "./components/Verify";
 import Account from "./components/Account";
+
 import axios from "axios";
 import Cookies from "universal-cookie";
 
@@ -46,10 +47,12 @@ axios.interceptors.response.use(response=>{
 
 
 axios.interceptors.request.use(request=>{
+
   if(cookies.get("refresh_token")){
     
     request.headers.Authorization= `Bearer ${cookies.get("access_token")}`;
   }
+  console.log(request);
   return request;
 })
 
@@ -64,6 +67,7 @@ function App() {
   return (
   <Router>
     <Switch>
+    
 
     <Route path="/account">
     <Account/>
@@ -71,7 +75,7 @@ function App() {
 
     </Route>
   
-    <Route path="/verify">
+    <Route path="/verify/:verification_token">
     <Verify/>
 
 
