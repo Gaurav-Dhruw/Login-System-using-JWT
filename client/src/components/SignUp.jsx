@@ -1,19 +1,24 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import axios from "axios";
 import Fade from "react-reveal/Fade";
 import Alert from 'react-bootstrap/Alert';
-import Spinner from 'react-bootstrap/Spinner'
+import {Link} from "react-router-dom";
 import { validate } from '../assets/js/validate';
 
 
 function SignUp(props) {
+	const [state,setState] = useState(false);
 	const [validation, setValidation] = useState({ user_name: false, email: false, password: false });
 	const [warning, setWarning] = useState({ user_name: false, email: false, password: false });
 	const [status, setStatus] = useState({ loading: false, variant: "light", show:false });
 
 	const [userData, setUserData] = useState({});
 
-
+	useEffect(() => {
+		setState(true)
+		
+		
+	}, [])
 
 	const submit = async (e) => {
 		e.preventDefault();
@@ -55,7 +60,8 @@ function SignUp(props) {
 
 	return (
 		<Fragment>
-
+			<Fade top duration={600} when={state}>
+			<div>
 			<div class="signup-form">
 
 				<form >
@@ -138,8 +144,10 @@ function SignUp(props) {
 
 
 				</form>
-				<div class="text-center">Already have an account? <button className="switchBtn" onClick={props.handleSwitch}>Login here</button></div>
+				<div class="text-center">Already have an account? <Link to="/login" className="switchBtn" >Login here</Link></div>
 			</div>
+			</div>
+			</Fade>
 
 		</Fragment>
 	)

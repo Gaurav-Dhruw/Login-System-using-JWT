@@ -1,8 +1,8 @@
-import React, { Fragment, useState } from 'react'
+import React, { Fragment, useState,useEffect } from 'react'
 import axios from "axios";
 import Fade from "react-reveal/Fade";
 import Alert from 'react-bootstrap/Alert';
-import {useHistory} from "react-router-dom"
+import {useHistory,Link} from "react-router-dom"
 import Cookies from "universal-cookie";
 
 import { validate } from '../assets/js/validate';
@@ -10,6 +10,8 @@ import { validate } from '../assets/js/validate';
 
 
 function Login(props) {
+	const [state,setState]=useState(false);
+
 	const history= useHistory();
 	const [validation, setValidation] = useState({ email: false, password: false });
 	const [warning, setWarning] = useState({ email: false, password: false })
@@ -18,7 +20,10 @@ function Login(props) {
 	const cookies = new Cookies();
 
 
-
+	useEffect(() => {
+		setState(true)
+		
+	}, [])
 
 	const submit = (e) => {
 		e.preventDefault();
@@ -64,6 +69,8 @@ function Login(props) {
 		setUserData({ ...userData, [e.target.name]: e.target.value })
 	}
 	return (
+		  <Fade bottom when={state} duration={600}>
+       
 		<div>
 			{/* {console.log(validation, "warning", warning)} */}
 			<div class="signup-form">
@@ -113,12 +120,13 @@ function Login(props) {
 						</Alert>
 					</div>
 				</form>
-				<div class="text-center"><button className=" switchBtn" onClick={props.handleSwitch}>Create Account</button></div>
+				<div class="text-center"><Link to="/signup" className=" switchBtn" >Create Account</Link></div>
 			</div>
 
 
 
 		</div>
+		</Fade> 
 	)
 }
 

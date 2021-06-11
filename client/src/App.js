@@ -59,11 +59,7 @@ axios.interceptors.request.use(request=>{
 
 function App() {
 
-  const [state,setState]=useState({show:false});
-
-  const handleClick=()=>{
-    setState({show: !state.show})
-  }
+  
   return (
   <Router>
     <Switch>
@@ -84,19 +80,23 @@ function App() {
  <Route path="/login">
 
 
- <div style={{minHeight:"100vh",maxHeight:"100vh",overflow:"hidden", backgroundColor:"#19aa8d"}}>
-        <Fade bottom collapse when={state.show}>
-        <Login handleSwitch={handleClick}></Login>
-        </Fade>
-        <Fade top collapse when={!state.show}>
-        
-     <SignUp handleSwitch={handleClick}></SignUp>
+        <Login ></Login>
      
-
-        </Fade>
-      
-      </div>
  </Route>
+
+ <Route path="/signup">
+
+
+
+ 
+       
+    <SignUp ></SignUp>
+    
+
+     
+     
+    
+</Route>
 
          
     <Route path="/">

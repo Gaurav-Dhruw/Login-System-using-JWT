@@ -13,7 +13,7 @@ function Account() {
     const [loading, setLoading] = useState(false);
     const [fade, setShow] = useState({showP:false, showD:false, showA:true});
 
-    const cookie = new Cookies;
+    const cookie = new Cookies();
     const history = useHistory();
     useEffect(() => {
         if (cookie.get("refresh_token")) {
@@ -56,8 +56,8 @@ function Account() {
         // e.preventDefault();
         let newFade={};
 
-        console.log(fade,Object.keys(fade))
-        Object.keys(fade).map(elm=>{
+        // console.log(fade,Object.keys(fade))
+        Object.keys(fade).forEach(elm=>{
             console.log(elm, e.target.name)
             if(e.target.name===elm){
                     newFade[elm]=true;
@@ -87,7 +87,7 @@ function Account() {
                         <div className="display">
                             <div className="btn-container">
 
-                                <button onClick={getUserData,handleFade} name="showA"type="button" class="btn btn-light">Account Details</button>
+                                <button onClick={()=>{getUserData();handleFade()}} name="showA"type="button" class="btn btn-light">Account Details</button>
 
 
                                 <button type="button" name="showP" onClick={handleFade} class="btn btn-light">

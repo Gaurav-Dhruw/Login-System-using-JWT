@@ -8,6 +8,7 @@ const {authentication, genAccessToken} =require("../middlewares/auth")
 
 
 router.post("/login",authentication, (req, res) => {
+    console.log("/login")
 
 });
 
