@@ -33,7 +33,7 @@ const authentication = async (req, res, next) => {
             return res.status(403).json({error:"Password is Incorrect"})
 
         }
-        return res.status(401).json({error:"This email is not yet verified"});
+        return res.status(403).json({error:"This email is not yet verified"});
 
     } 
 
