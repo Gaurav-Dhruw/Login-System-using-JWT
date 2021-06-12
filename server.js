@@ -4,6 +4,7 @@ const cors = require("cors");
 const path =require("path")
 require("dotenv").config();
 const authRoute = require("./routes/auth.route");
+const protectedRoute = require ("./routes/protected.route")
 const { verifyEmail, addNewUser, autherization} = require("./middlewares/auth.js");
 
 
@@ -24,6 +25,7 @@ app.use("/api/signup",[addNewUser,verifyEmail]);
 
 // Route 
 app.use('/api', authRoute);
+app.use('/api/protected', protectedRoute)
 
 
 const port= process.env.PORT || 5000;

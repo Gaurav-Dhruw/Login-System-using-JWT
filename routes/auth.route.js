@@ -40,13 +40,13 @@ router.get("/verify/:verification_token", async (req, res) => {
     
 })
 
-router.get("/gen/accesstoken",genAccessToken,(req,res)=>{
+router.post("/gen/accesstoken",genAccessToken,(req,res)=>{
 
 }
 )
+router.get("/logout",(req,res)=>{
 
-router.get("/login/auto",genAccessToken,(req,res)=>{
-    
+    return res.status(200).json({logout:true});
 
 })
 

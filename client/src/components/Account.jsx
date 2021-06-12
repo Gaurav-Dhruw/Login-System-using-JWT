@@ -1,27 +1,65 @@
-import React, { useEffect, useState, Fragment } from 'react';
-import Fade from "react-reveal/Fade"
-
+import React, { useEffect, useState, Fragment, useContext } from 'react';
+import Fade from "react-reveal/Fade";
+import {validate} from "../assets/js/validate";
+import {UserContext} from "../context/UserContextProvider"
+import Alert from 'react-bootstrap/Alert';
 
 import Cookies from "universal-cookie";
 import { Redirect, useHistory } from 'react-router';
 import Navbar from './Navbar';
 import axios from 'axios';
 
-function Account() {
-    const [data, setData] = useState({})
-    const [loginStatus, setLoginStatus] = useState({ login: true });
-    const [loading, setLoading] = useState(false);
-    const [fade, setShow] = useState({showP:false, showD:false, showA:true});
+const useConstructor=(callBack = () => {})=> {
+    const [hasBeenCalled, setHasBeenCalled] = useState(false);
+    if (hasBeenCalled) return;
+    callBack();
+    setHasBeenCalled(true);
+  }
 
-    const cookie = new Cookies();
+function Account(props) {
+    const [data, setData] = useState({});
+    const [validation, setValidation] = useState({  password: false });
+	const [warning, setWarning] = useState({ password: false });
+    const [loginStatus, setLoginStatus] = useState(false);
+	const [status, setStatus] = useState({ loading: false, variant: "light", show:false });
+    const [deleteStatus, setDeleteStatus] = useState({ loading: false, variant: "light", show:false });
+
+
+    const [loading, setLoading] = useState(true);
+    const [fade, setShow] = useState({showP:false, showD:false, showA:true});
+    const [user,setUser]= useContext(UserContext);
+
+    const cookies = new Cookies();
     const history = useHistory();
-    useEffect(() => {
-        if (cookie.get("refresh_token")) {
-            return setLoginStatus({ login: true })
+
+    useConstructor(()=>{
+
+        if (cookies.get("refresh_token")) {
+            setUser({...user,loggedIn:true})
+            return setLoginStatus(true)           
+
         }
 
+        
+        history.push("/login")
 
-        // history.push("/login")
+    })
+    
+    
+    
+    useEffect(() => {
+
+        axios.get("/api/protected/account")
+        .then(res=>{
+            console.log(res);
+            setData({...data,...res.data});
+            setUser({...user,...res.data});
+            setLoading(false);
+        })
+        .catch(err=>{
+
+        })
+        
 
     }, [])
 
@@ -30,30 +68,125 @@ function Account() {
 
     }
 
-    const handleSubmit = (e) => {
+   
+
+  
+
+    const changePassword=(e)=>{
         e.preventDefault();
-        axios.put("/api/account/password/change", { password: data.password })
-            .then(res => {
-                console.log(res)
-            })
-            .catch(err => {
-                console.error(err);
-            })
+
+        validate(data, validation, setValidation);
+		setWarning({password: !validation.password })
+
+		if (validation.password === true) {
+
+        axios.put("/api/protected/account/password/change",{password: data.password })
+        .then(res=>{
+            console.log(res);
+            setStatus({ loading: false, variant: "success", show:true ,statusMessage:res.data.message})
+        })
+        .catch(err=>{
+
+            setStatus({ loading: false, variant: "danger", show:true ,statusMessage:err.response.data.error})
+
+            
+        })
+
+    }
     }
 
-    const getUserData = () => {
-        axios.get("/api/account")
-            .then(res => {
-                console.log(res)
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error(err);
-            })
+    const deleteAccount=()=>{
+        setDeleteStatus({loading:true});
+        axios.delete("/api/protected/account/delete")
+        .then(res=>{
+            console.log(res);
+            cookies.remove("refresh_token");
+            cookies.remove("access_token");
+            history.push("/")
+
+        })
+        .catch(err=>{
+            setDeleteStatus({loading:false,  variant:"danger", statusMessage:"Error occured while deleting account"})
+
+        })
     }
+
+    const renderDisplay=()=>{
+
+        if(fade.showP){
+
+        return (<Fade   duration={1000} >
+
+        <form className="password-form" >
+            <div className="input-container">
+            <input type="text" placeholder="Enter new password" onChange={handleInput} />
+            <Fade duration={500} top when={warning.password}>
+
+							<div className="warning">min 8 char, must contain number and special character </div>
+			</Fade>
+
+            </div>
+            <button className="btn btn-primary" type="submit" onClick={changePassword}>Change Passowrd</button>
+            <div className="status-container">
+
+						{status.loading ? <div class="d-flex justify-content-center">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden"></span>
+  </div>
+</div>:
+							<Alert transition={true} show={status.show} variant={status.variant}>
+								{status.statusMessage}
+							</Alert>
+						}
+					</div>
+        </form>
+    </Fade>)
+
+        }
+
+        else if(fade.showA){
+    return (<Fade duration={1000}>
+        <div className="account-container">
+            {loading ? <div class="d-flex justify-content-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden"></span>
+                </div>
+            </div> : <div className="account-details">
+                <p>User: {data.user_name}</p>
+                <p>Email: {data.email}</p>
+            </div>}
+
+        </div>
+    </Fade>)
+
+        }
+
+
+    return (<Fade duration={1000}>
+        <div className="delete-container">
+        <button type="button" onClick={deleteAccount} class="btn btn-danger">Confirm Delete</button>
+        <div className="status-container">
+
+						{deleteStatus.loading ? <div class="d-flex justify-content-center">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden"></span>
+  </div>
+</div>:
+							<Alert transition={true} show={deleteStatus.show} variant={deleteStatus.variant}>
+								{deleteStatus.statusMessage}
+							</Alert>
+						}
+					</div>
+        </div>
+    </Fade>)
+    }
+
+ 
+
+   
 
     const handleFade=(e)=>{
-        // e.preventDefault();
+        e.preventDefault();
         let newFade={};
 
         // console.log(fade,Object.keys(fade))
@@ -72,10 +205,12 @@ function Account() {
     }
     return (
         <Fragment>
-            {console.log(fade,"fade")}
-            {loginStatus.login ?
+            {console.log(fade,"fade", loginStatus)}
+            {user.loggedIn ?
 
-                <Fragment><Navbar />
+                <Fragment>
+                    
+                    <Navbar />
 
 
 
@@ -87,7 +222,7 @@ function Account() {
                         <div className="display">
                             <div className="btn-container">
 
-                                <button onClick={()=>{getUserData();handleFade()}} name="showA"type="button" class="btn btn-light">Account Details</button>
+                                <button onClick={(e)=>{handleFade(e)}} name="showA"type="button" class="btn btn-light">Account Details</button>
 
 
                                 <button type="button" name="showP" onClick={handleFade} class="btn btn-light">
@@ -98,32 +233,8 @@ function Account() {
                 </button>
                             </div>
                             <div className="display-area">
-                                <Fade when={fade.showP} duration={500} >
-
-                                    <form className="password-form" >
-                                        <input type="text" placeholder="Enter new password" onChange={handleInput} />
-                                        <button className="btn btn-primary" type="submit" onClick={handleSubmit}>Change Passowrd</button>
-                                    </form>
-                                </Fade>
-                                <Fade when={fade.showA} duration={500}>
-                                    <div className="account-container">
-                                        {loading ? <div class="d-flex justify-content-center">
-                                            <div class="spinner-border text-primary" role="status">
-                                                <span class="visually-hidden"></span>
-                                            </div>
-                                        </div> : <div className="account-details">
-                                            <p>User: {data.user_nampe}</p>
-                                            <p>Email: {data.email}</p>
-                                        </div>}
-
-                                    </div>
-                                </Fade>
-                                <Fade when={fade.showD} duration={500}>
-                                    <div className="delete-container">
-                                    <button type="button" onClick={handleFade} class="btn btn-danger">Confirm Delete</button>
-
-                                    </div>
-                                </Fade>
+                                
+                               {renderDisplay()}
                             </div>
 
                         </div>

@@ -26,7 +26,7 @@ const authentication = async (req, res, next) => {
                 const payload = {user_name:result.user_name, email: result.email}
             console.log(result);
             const access_token=jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '10m' });
-            const refresh_token=jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET,{ expiresIn: '1h' });
+            const refresh_token=jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET,{ expiresIn: '1d' });
             return res.status(200).json({user_data:payload, refresh_token, access_token })
             }
     
@@ -77,9 +77,9 @@ const verifyEmail = async (req, res, next) => {
     console.log(emailHtml)
 
     const mailOption = {
-        from: '"Verification" <webapp.test.0506@gmail.com>',
+        from: '"Login Manager" <webapp.test.0506@gmail.com>',
         to: user.email,
-        subject: "email verfication",
+        subject: "Complete email verfication",
         html: emailHtml
     }
 
@@ -90,7 +90,7 @@ const verifyEmail = async (req, res, next) => {
         })
         .catch(error => {
             console.log(error)
-            res.status(200).json({ message: "Email not Sent" });
+            res.status(400).json({ message: "Email not Sent" });
             res.end();
         });
 
@@ -120,12 +120,12 @@ const addNewUser = async (req, res, next) => {
            
 
             req.verification_token = verification_token;
-            req.user_data = {_id:result._id,user_name:result.user_name,email:result.email, verified:result.verified};
+            req.user_data = {user_name:result.user_name,email:result.email, verified:result.verified};
             next()
         })
         .catch((err) => {
             console.log(err, "error while saving");
-            res.status(200).json({ message: "Email already registered !!!" })
+            res.status(400).json({ message: "Email already registered !!!" })
             res.end;
         })
 }
@@ -133,22 +133,34 @@ const addNewUser = async (req, res, next) => {
 
 // Check for access token to provide further access to procted links;
 const autherization=(req,res,next)=>{
-    const access_token= req.headers.Authorization.split(" ")[1];
-    jwt.verify(access_token,process.env.ACCESS_TOKEN_SECRET,(err,payload)=>{
-        if(err) return res.send(401);
-        req.payload= payload;
-        next();    
-    })
+    try{
+        const access_token= req.headers.authorization.split(" ")[1];
+        console.log("autherization",access_token);
+        jwt.verify(access_token,process.env.ACCESS_TOKEN_SECRET,(err,payload)=>{
+            if(err) return res.sendStatus(401);
+            const newPayload={email:payload.email, user_name:payload.user_name}
+            req.payload= newPayload;
+            next();    
+        })
+    } 
+    catch(error){
+        return res.sendStatus(401);
+    }
 }
 
 // generate acces token 
 const genAccessToken=(req,res,next)=>{
     const refresh_token= req.body.refresh_token;
+    console.log("gen access token", refresh_token)
     jwt.verify(refresh_token,process.env.REFRESH_TOKEN_SECRET,(err,payload)=>{
+        // console.log(payload)
         if(payload){
-            const access_token=jwt.sign(payload,process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '10m' });
-            res.status(200).json({access_token})
+            const {email,user_name}=payload; 
+            const access_token=jwt.sign({email,user_name},process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '10m' });
+            return res.status(200).json({access_token})
         }
+        res.sendStatus(400);
+
         next();
 })
 }

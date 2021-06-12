@@ -41,7 +41,7 @@ function Verify() {
       console.log(res);
       if (res.data.verified === true) {
 
-        cookies.set("refresh_token", res.data.refresh_token, { path: "/", expires: new Date(new Date().getTime() + 1 * 3600 * 1000) });
+        cookies.set("refresh_token", res.data.refresh_token, { path: "/", expires: new Date(new Date().getTime() + 24 * 3600 * 1000) });
         cookies.set("access_token", res.data.access_token, { path: "/", expires: new Date(new Date().getTime() + 10 * 60 * 1000) });
       }
       setState({ loading: false, verified : true });

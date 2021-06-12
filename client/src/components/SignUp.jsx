@@ -2,22 +2,45 @@ import React, { Fragment, useState, useEffect } from 'react'
 import axios from "axios";
 import Fade from "react-reveal/Fade";
 import Alert from 'react-bootstrap/Alert';
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import { validate } from '../assets/js/validate';
+import Cookies from "universal-cookie";
 
+
+
+const useConstructor=(callBack = () => {})=> {
+    const [hasBeenCalled, setHasBeenCalled] = useState(false);
+    if (hasBeenCalled) return;
+    callBack();
+    setHasBeenCalled(true);
+  }
 
 function SignUp(props) {
-	const [state,setState] = useState(false);
+	const [show,setShow] = useState(false);
 	const [validation, setValidation] = useState({ user_name: false, email: false, password: false });
 	const [warning, setWarning] = useState({ user_name: false, email: false, password: false });
 	const [status, setStatus] = useState({ loading: false, variant: "light", show:false });
 
 	const [userData, setUserData] = useState({});
 
+	const cookies = new Cookies();
+	const history= useHistory();
+
+
+
+	useConstructor(()=>{
+
+        if (cookies.get("refresh_token")) {
+    
+        history.push("/")
+		}
+
+    })
+
+
 	useEffect(() => {
-		setState(true)
-		
-		
+		setShow(true)
+	
 	}, [])
 
 	const submit = async (e) => {
@@ -34,19 +57,19 @@ function SignUp(props) {
 					console.log(res)
 					
 					
+					setStatus({ loading: false, show: true, variant: "success", statusMessage:"Email has been sent. Verify it to continue"})
 
-					if(res.data.message){
-						setStatus({ loading: false, show: true, variant: "danger", statusMessage: res.data.message })
-					}
+					
+						
+					
 
-					else{
-						setStatus({ loading: false, show: true, variant: "success", statusMessage:"Email has been sent. Verify it to continue"})
-					}
-
+					
+				
 					
 				})
 				.catch(err => {
 					console.log(err)
+					setStatus({ loading: false, show: true, variant: "danger", statusMessage: err.response.data.message })
 					
 				})
 
@@ -60,7 +83,8 @@ function SignUp(props) {
 
 	return (
 		<Fragment>
-			<Fade top duration={600} when={state}>
+			 <div style={{padding:"20px", paddingBottom:"0"}}><Link to="/"><button className="btn btn-dark">Go to Home</button></Link></div>
+			<Fade top duration={600} when={show}>
 			<div>
 			<div class="signup-form">
 

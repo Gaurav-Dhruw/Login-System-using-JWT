@@ -23,13 +23,12 @@ axios.interceptors.response.use(response=>{
   if(error.response.status===401 && cookies.get("refresh_token")){
 
     try{
-      const res = await axios.get("/api/gen/accesstoken");
-      
-        cookies.set("access_token", res.data.access_token, { path: "/", expires: new Date(new Date().getTime + 1 * 60 * 1000) });
+      const res = await axios.post("/api/gen/accesstoken",{refresh_token:cookies.get("refresh_token")});
+      const retryRequest= error.response.config;
+        cookies.set("access_token", res.data.access_token, { path: "/", expires: new Date(new Date().getTime() + 10 * 60 * 1000) });
 
-        // const {url, method}= error.response.config;
         
-        const retryRequest = await axios({...error.response.config});
+        return axios.request(retryRequest);
 
     }
     catch(err){
@@ -55,6 +54,9 @@ axios.interceptors.request.use(request=>{
   console.log(request);
   return request;
 })
+
+
+
 
 
 function App() {
