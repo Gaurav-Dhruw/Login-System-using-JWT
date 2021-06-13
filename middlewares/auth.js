@@ -50,16 +50,21 @@ oAuth2Client.setCredentials({ refresh_token: process.env.REFRESH_TOKEN })
 
 
 // Sends an email with verification link
-const verifyEmail = async (req, res, next) => {
+const sendEmail = async (req, res, next) => {
+
+    try{
     console.log("inside verify email")
 
     const user = req.body;
 
+    const verification_token = crypto.randomBytes(16).toString("hex");
+    console.log(verification_token);
 
-    const verification_link = req.protocol + '://' + req.get('host') + "/verify/" + req.verification_token;
+    const verification_link = req.protocol + '://' + req.get('host') + "/verify/" + verification_token;
 
 
     const accessToken = await oAuth2Client.getAccessToken();
+    console.log("gmail accesss token ",accessToken)
     const transporter = nodemailer.createTransport({
         service: "gmail",
         auth: {
@@ -74,7 +79,7 @@ const verifyEmail = async (req, res, next) => {
         }
     });
     const emailHtml=  pug.renderFile(path.resolve(app.get("views"),"email.pug"),{verification_link});
-    console.log(emailHtml)
+    // console.log(emailHtml)
 
     const mailOption = {
         from: '"Login Manager" <webapp.test.0506@gmail.com>',
@@ -83,9 +88,11 @@ const verifyEmail = async (req, res, next) => {
         html: emailHtml
     }
 
-    try{
-        const emailStatus= await transporter.sendMail(mailOption);
+    
+        await transporter.sendMail(mailOption);
         console.log("mail sent");
+        req.verification_token=verification_token;
+
         next();
     }
     catch(error){
@@ -104,34 +111,38 @@ const verifyEmail = async (req, res, next) => {
 
 // Add new user to DB
 const addNewUser = async (req, res, next) => {
-
-    const { user_name, email, password } = req.body;
-    const salt = await bcrypt.genSalt(10);
-
-    const verification_token = crypto.randomBytes(16).toString("hex");
-    console.log(verification_token);
-
-    const hashedPassword = await bcrypt.hash(password, salt);
-    const new_user = new User({
-        user_name,
-        email,
-        password: hashedPassword,
-        verification_token
-    })
-    new_user.save()
-        .then((result) => {
-            console.log("data saved")
-           
-
-            req.verification_token = verification_token;
-            req.user_data = {user_name:result.user_name,email:result.email, verified:result.verified};
-            next()
+    console.log("INSIDE ADD New user")
+    try{
+        const { user_name, email, password } = req.body;
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+        const new_user = new User({
+            user_name,
+            email,
+            password: hashedPassword,
+        verification_token: req.verification_token
         })
-        .catch((err) => {
-            console.log(err, "error while saving");
-            res.status(400).json({ message: "Email already registered !!!" })
-            res.end;
-        })
+        new_user.save()
+            .then((result) => {
+                console.log("data saved")
+               
+    
+                req.user_data = {user_name:result.user_name,email:result.email, verified:result.verified};
+                next()
+            })
+            .catch((err) => {
+                console.log(err, "error while saving");
+                res.status(400).json({ message: "Email already registered !!!" })
+                res.end;
+            })
+
+    }catch(error){
+        console.log(err, "DB error");
+        res.status(400).json({ message: "Error occured while registering" })
+
+        res.end;
+    }
+   
 }
 
 
@@ -192,4 +203,4 @@ const genAccessToken=(req,res,next)=>{
 
 
 
-module.exports = { authentication, verifyEmail, addNewUser, autherization, genAccessToken };
+module.exports = { authentication, sendEmail, addNewUser, autherization, genAccessToken };

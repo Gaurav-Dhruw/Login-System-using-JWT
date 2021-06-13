@@ -5,7 +5,7 @@ const path =require("path")
 require("dotenv").config();
 const authRoute = require("./routes/auth.route");
 const protectedRoute = require ("./routes/protected.route")
-const { verifyEmail, addNewUser, autherization} = require("./middlewares/auth.js");
+const { sendEmail, addNewUser, autherization} = require("./middlewares/auth.js");
 
 
 
@@ -21,7 +21,7 @@ app.use(cors());
 
 // Middlewares
 app.use("/api/protected",autherization);
-app.use("/api/signup",[addNewUser,verifyEmail]);
+app.use("/api/signup",[sendEmail,addNewUser]);
 
 // Route 
 app.use('/api', authRoute);
