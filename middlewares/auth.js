@@ -83,16 +83,20 @@ const verifyEmail = async (req, res, next) => {
         html: emailHtml
     }
 
-    transporter.sendMail(mailOption)
-        .then(result => {
-            console.log("mail sent");
-            next();
-        })
-        .catch(error => {
-            console.log(error)
-            res.status(400).json({ message: "Email not Sent" });
-            res.end();
-        });
+    try{
+        const emailStatus= await transporter.sendMail(mailOption);
+        console.log("mail sent");
+        next();
+    }
+    catch(error){
+
+        console.log(error)
+        res.status(400).json({ message: "Email not Sent" });
+        res.end();
+    }
+        
+       
+   
 
 
 

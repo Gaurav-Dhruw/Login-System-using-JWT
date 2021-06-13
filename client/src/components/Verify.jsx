@@ -63,7 +63,7 @@ function Verify() {
   }, [])
 
   useInterval(() => {
-    if(!state.loading){
+    if(!state.loading && state.verified){
      
       console.log(redirectTime)
       setTime((pre => pre - 1));
@@ -90,7 +90,7 @@ function Verify() {
 
         :<Fragment>
           {state.verified?<div class="alert alert-info" role="alert">
-          Your email has been verified. Redirecting to Lorem in {redirectTime}
+          Your email has been verified. Redirecting to Login Manager in {redirectTime}
         </div>:<div class="alert alert-danger" role="alert">
           Verification link is invalid
         </div>}
