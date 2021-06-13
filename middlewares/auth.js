@@ -146,16 +146,16 @@ const addNewUser = async (req, res, next) => {
 
 
 // Check for access token to provide further access to procted links;
-const autherization=(req,res,next)=>{
+const autherization=async (req,res,next)=>{
     try{
         const access_token= req.headers.authorization.split(" ")[1];
         console.log("autherization",access_token);
-        jwt.verify(access_token,process.env.ACCESS_TOKEN_SECRET,(err,payload)=>{
-            if(err) return res.sendStatus(401);
+        const payload= jwt.verify(access_token,process.env.ACCESS_TOKEN_SECRET)
+
             const newPayload={email:payload.email, user_name:payload.user_name}
             req.payload= newPayload;
             next();    
-        })
+     
     } 
     catch(error){
         return res.sendStatus(401);
@@ -167,11 +167,12 @@ const genAccessToken=(req,res,next)=>{
     const refresh_token= req.body.refresh_token;
     console.log("gen access token", refresh_token)
     jwt.verify(refresh_token,process.env.REFRESH_TOKEN_SECRET,(err,payload)=>{
-        // console.log(payload)
+        console.log(payload)
         if(payload){
             const {email,user_name}=payload; 
             const access_token=jwt.sign({email,user_name},process.env.ACCESS_TOKEN_SECRET,{ expiresIn: '10m' });
-            return res.status(200).json({access_token})
+            return res.status(200).json({access_token});
+            
         }
         res.sendStatus(400);
 
