@@ -32,9 +32,9 @@ const port= process.env.PORT || 5000;
 
 // config for production
 if(process.env.NODE_ENV==="production"){
-    app.use(express.static(path.resolve(__dirname,"./client/build")));
+    app.use(express.static(path.resolve(__dirname,"client","build")));
     app.get("*",(req,res)=>{
-        res.status(200).send(path.resolve(__dirname,"client","build","index.html"))
+        res.status(200).sendFile(path.resolve(__dirname,"client","build","index.html"))
     })
 }
 
