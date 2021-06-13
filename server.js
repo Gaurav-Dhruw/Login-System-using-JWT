@@ -21,7 +21,7 @@ app.use(cors());
 
 // Middlewares
 app.use("/api/protected",autherization);
-app.use("/api/signup",[sendEmail,addNewUser]);
+app.use("/api/signup",[addNewUser,sendEmail]);
 
 // Route 
 app.use('/api', authRoute);

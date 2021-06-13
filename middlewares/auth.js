@@ -57,10 +57,7 @@ const sendEmail = async (req, res, next) => {
 
     const user = req.body;
 
-    const verification_token = crypto.randomBytes(16).toString("hex");
-    console.log(verification_token);
-
-    const verification_link = req.protocol + '://' + req.get('host') + "/verify/" + verification_token;
+    const verification_link = req.protocol + '://' + req.get('host') + "/verify/" + req.verification_token;
 
 
     const accessToken = await oAuth2Client.getAccessToken();
@@ -91,7 +88,6 @@ const sendEmail = async (req, res, next) => {
     
         await transporter.sendMail(mailOption);
         console.log("mail sent");
-        req.verification_token=verification_token;
 
         next();
     }
@@ -114,19 +110,22 @@ const addNewUser = async (req, res, next) => {
     console.log("INSIDE ADD New user")
     try{
         const { user_name, email, password } = req.body;
+        const verification_token = crypto.randomBytes(16).toString("hex");
+        console.log(verification_token);
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
         const new_user = new User({
             user_name,
             email,
             password: hashedPassword,
-        verification_token: req.verification_token
+        verification_token
         })
         new_user.save()
             .then((result) => {
                 console.log("data saved")
                
-    
+                req.verification_token=verification_token;
+
                 req.user_data = {user_name:result.user_name,email:result.email, verified:result.verified};
                 next()
             })
