@@ -4,7 +4,9 @@ import Fade from "react-reveal/Fade";
 import Alert from 'react-bootstrap/Alert';
 import {useHistory,Link, Redirect} from "react-router-dom"
 import Cookies from "universal-cookie";
-import {UserContext} from "../context/UserContextProvider"
+import {UserContext} from "../context/UserContextProvider";
+import {useSelector , useDispatch} from "react-redux";
+import {action} from "../store/action"
 
 
 import { validate } from '../assets/js/validate';
@@ -19,31 +21,42 @@ const useConstructor=(callBack = () => {})=> {
 
 function Login(props) {
 	const [show,setShow]=useState(false);
-	const[user,setUser]= useContext(UserContext);
+	const user= useSelector(state=>state.reducer);
+	const  dispatch = useDispatch()
 
 	const cookies = new Cookies();
 	const history= useHistory();
 	const [validation, setValidation] = useState({ email: false, password: false });
 	const [warning, setWarning] = useState({ email: false, password: false })
 	const [alert, setAlert] = useState({ show: false, variant: "danger" });
+	const [redirect, setRedirect] = useState(false);
+
 	const [userData, setUserData] = useState({});
 
 
 	useConstructor(()=>{
-        console.log("inside login const")
+        console.log("inside login constructor")
 
-        if (!cookies.get("refresh_token")===false) {
+        // if (cookies.get("refresh_token")) {
            
 
-        console.log("inside if")
-			history.push("/")
-			}
+        // console.log("inside if");
+		//  setRedirect(true);
+		// 	// history.push("/")
+		// 	}
 
     })
+	// useEffect(()=>{
+	// 	if(cookies.get("refresh_token")){
+	// 		history.push('/account')
+	// 	}
+	// },[user])
 
 
 	useEffect(() => {
 		setShow(true);
+
+		return()=>console.log("login will unmount");
 		
 	}, []);
 
@@ -67,9 +80,17 @@ function Login(props) {
 
 					cookies.set("refresh_token", res.data.refresh_token, { path: "/", expires: new Date(new Date().getTime() + 24 * 3600 * 1000) });
 					cookies.set("access_token", res.data.access_token, { path: "/", expires: new Date(new Date().getTime() + 10 * 60 * 1000) });
-					setUser({...user,loggedIn:true,...res.data.user_data})
+					console.log("inside response login, before")
+					// dispatch(action({loggedIn:true,...res.data.user_data}))
+					console.log("inside response login, after dispatch")
 					// setLoginStatus(true);
-					history.push("/account");
+
+					
+						
+						
+					
+
+					// setRedirect(true);
 
 					
 				})
@@ -93,6 +114,9 @@ function Login(props) {
 		setUserData({ ...userData, [e.target.name]: e.target.value })
 	}
 	return (
+		<Fragment>
+			{console.log("inside render login")}
+			{!cookies.get("refresh_token")?
 		<Fragment>
 	   <div style={{padding:"20px", paddingBottom:"0"}}><Link to="/"><button className="btn btn-dark">Go to Home</button></Link></div>
 			<Fade bottom when={show} duration={600}>
@@ -152,7 +176,8 @@ function Login(props) {
 
 
 	   </div>
-	   </Fade>
+	   </Fade></Fragment>:<Redirect to ="/account"></Redirect>}
+		
 		</Fragment>
 		  
 	)

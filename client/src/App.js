@@ -102,7 +102,7 @@ function App() {
 
          
     <Route path="/">
-    <Navbar></Navbar>
+    
 
 <Main></Main>
     </Route>

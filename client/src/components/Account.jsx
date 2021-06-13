@@ -8,6 +8,8 @@ import Cookies from "universal-cookie";
 import { Redirect, useHistory } from 'react-router';
 import Navbar from './Navbar';
 import axios from 'axios';
+import {useDispatch,useSelector} from "react-redux";
+import {action} from "../store/action";
 
 const useConstructor=(callBack = () => {})=> {
     const [hasBeenCalled, setHasBeenCalled] = useState(false);
@@ -17,31 +19,34 @@ const useConstructor=(callBack = () => {})=> {
   }
 
 function Account(props) {
-    const [data, setData] = useState({});
+    const user = useSelector(state => state.reducer);
+  const dispatch = useDispatch();
+    const [newPassword, setNewPassword] = useState({});
     const [validation, setValidation] = useState({  password: false });
 	const [warning, setWarning] = useState({ password: false });
-    const [loginStatus, setLoginStatus] = useState(false);
+    // const [loginStatus, setLoginStatus] = useState(false);
 	const [status, setStatus] = useState({ loading: false, variant: "light", show:false });
     const [deleteStatus, setDeleteStatus] = useState({ loading: false, variant: "light", show:false });
 
 
     const [loading, setLoading] = useState(true);
     const [fade, setShow] = useState({showP:false, showD:false, showA:true});
-    const [user,setUser]= useContext(UserContext);
+    // const [user,setUser]= useContext(UserContext);
 
     const cookies = new Cookies();
     const history = useHistory();
 
     useConstructor(()=>{
+        console.log("inside login constructor")
 
-        if (cookies.get("refresh_token")) {
-            setUser({...user,loggedIn:true})
-            return setLoginStatus(true)           
+        if (cookies.get("refresh_token") ) {
+            return dispatch(action({loggedIn:true}))
+            // return setLoginStatus(true)           
 
         }
 
         
-        history.push("/login")
+        // history.push("/login")
 
     })
     
@@ -52,8 +57,8 @@ function Account(props) {
         axios.get("/api/protected/account")
         .then(res=>{
             console.log(res);
-            setData({...data,...res.data});
-            setUser({...user,...res.data});
+            // setData({...data,...res.data});
+            dispatch(action({...res.data}));
             setLoading(false);
         })
         .catch(err=>{
@@ -64,7 +69,7 @@ function Account(props) {
     }, [])
 
     const handleInput = (e) => {
-        setData({ ...data, password: e.target.value })
+        setNewPassword({password: e.target.value })
 
     }
 
@@ -75,12 +80,13 @@ function Account(props) {
     const changePassword=(e)=>{
         e.preventDefault();
 
-        validate(data, validation, setValidation);
+        validate(newPassword, validation, setValidation);
 		setWarning({password: !validation.password })
 
 		if (validation.password === true) {
+            setStatus({...status, loading: true});
 
-        axios.put("/api/protected/account/password/change",{password: data.password })
+        axios.put("/api/protected/account/password/change",{password: newPassword.password })
         .then(res=>{
             console.log(res);
             setStatus({ loading: false, variant: "success", show:true ,statusMessage:res.data.message})
@@ -96,17 +102,22 @@ function Account(props) {
     }
 
     const deleteAccount=()=>{
-        setDeleteStatus({loading:true});
+        setDeleteStatus({...deleteStatus,loading:true});
         axios.delete("/api/protected/account/delete")
         .then(res=>{
             console.log(res);
             cookies.remove("refresh_token");
             cookies.remove("access_token");
-            history.push("/")
+            // setTimeout(() => {
+                
+            //     history.push("/")
+            // }, 100);
+            return dispatch(action({loggedIn:false}))
+
 
         })
         .catch(err=>{
-            setDeleteStatus({loading:false,  variant:"danger", statusMessage:"Error occured while deleting account"})
+            setDeleteStatus({loading:false,  variant:"danger", statusMessage:"Error occured while deleting account", show:true})
 
         })
     }
@@ -152,8 +163,8 @@ function Account(props) {
                     <span class="visually-hidden"></span>
                 </div>
             </div> : <div className="account-details">
-                <p>User: {data.user_name}</p>
-                <p>Email: {data.email}</p>
+                <p>User: {user.user_name}</p>
+                <p>Email: {user.email}</p>
             </div>}
 
         </div>
@@ -205,8 +216,8 @@ function Account(props) {
     }
     return (
         <Fragment>
-            {console.log(fade,"fade", loginStatus)}
-            {user.loggedIn ?
+            {console.log(user)}
+            {cookies.get("refresh_token")?
 
                 <Fragment>
                     

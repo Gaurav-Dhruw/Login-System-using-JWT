@@ -308,6 +308,7 @@ a{
 	width: 100%;
 	justify-content: center;
 	align-items: center;
+	height: 100%;
 }
 .password-form{
 	padding:30px 0;

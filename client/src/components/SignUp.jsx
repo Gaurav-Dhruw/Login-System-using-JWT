@@ -2,7 +2,7 @@ import React, { Fragment, useState, useEffect } from 'react'
 import axios from "axios";
 import Fade from "react-reveal/Fade";
 import Alert from 'react-bootstrap/Alert';
-import {Link, useHistory} from "react-router-dom";
+import {Link, Redirect, useHistory} from "react-router-dom";
 import { validate } from '../assets/js/validate';
 import Cookies from "universal-cookie";
 
@@ -32,7 +32,7 @@ function SignUp(props) {
 
         if (cookies.get("refresh_token")) {
     
-        history.push("/")
+       
 		}
 
     })
@@ -82,7 +82,11 @@ function SignUp(props) {
 
 
 	return (
-		<Fragment>
+		<Fragment>{!cookies.get("refresh_token")?
+			
+			<Fragment>
+
+			
 			 <div style={{padding:"20px", paddingBottom:"0"}}><Link to="/"><button className="btn btn-dark">Go to Home</button></Link></div>
 			<Fade top duration={600} when={show}>
 			<div>
@@ -171,7 +175,7 @@ function SignUp(props) {
 				<div class="text-center">Already have an account? <Link to="/login" className="switchBtn" >Login here</Link></div>
 			</div>
 			</div>
-			</Fade>
+			</Fade></Fragment>: <Redirect to='/account'></Redirect>}
 
 		</Fragment>
 	)
