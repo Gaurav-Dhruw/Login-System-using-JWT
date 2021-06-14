@@ -1,11 +1,10 @@
-import React, { useEffect, useState, Fragment, useContext } from 'react';
+import React, { useEffect, useState, Fragment} from 'react';
 import Fade from "react-reveal/Fade";
 import {validate} from "../assets/js/validate";
-import {UserContext} from "../context/UserContextProvider"
 import Alert from 'react-bootstrap/Alert';
 
 import Cookies from "universal-cookie";
-import { Redirect, useHistory } from 'react-router';
+import { Redirect} from 'react-router';
 import Navbar from './Navbar';
 import axios from 'axios';
 import {useDispatch,useSelector} from "react-redux";
@@ -24,29 +23,23 @@ function Account(props) {
     const [newPassword, setNewPassword] = useState({});
     const [validation, setValidation] = useState({  password: false });
 	const [warning, setWarning] = useState({ password: false });
-    // const [loginStatus, setLoginStatus] = useState(false);
 	const [status, setStatus] = useState({ loading: false, variant: "light", show:false });
     const [deleteStatus, setDeleteStatus] = useState({ loading: false, variant: "light", show:false });
 
 
     const [loading, setLoading] = useState(true);
     const [fade, setShow] = useState({showP:false, showD:false, showA:true});
-    // const [user,setUser]= useContext(UserContext);
 
     const cookies = new Cookies();
-    const history = useHistory();
 
     useConstructor(()=>{
-        console.log("inside login constructor")
+        if (cookies.get("refresh_token") && !user.loggedIn) {
 
-        if (cookies.get("refresh_token") ) {
             return dispatch(action({loggedIn:true}))
-            // return setLoginStatus(true)           
 
         }
 
         
-        // history.push("/login")
 
     })
     
@@ -56,8 +49,6 @@ function Account(props) {
 
         axios.get("/api/protected/account")
         .then(res=>{
-            console.log(res);
-            // setData({...data,...res.data});
             dispatch(action({...res.data}));
             setLoading(false);
         })
@@ -88,7 +79,6 @@ function Account(props) {
 
         axios.put("/api/protected/account/password/change",{password: newPassword.password })
         .then(res=>{
-            console.log(res);
             setStatus({ loading: false, variant: "success", show:true ,statusMessage:res.data.message})
         })
         .catch(err=>{
@@ -105,13 +95,9 @@ function Account(props) {
         setDeleteStatus({...deleteStatus,loading:true});
         axios.delete("/api/protected/account/delete")
         .then(res=>{
-            console.log(res);
             cookies.remove("refresh_token");
             cookies.remove("access_token");
-            // setTimeout(() => {
-                
-            //     history.push("/")
-            // }, 100);
+          
             return dispatch(action({loggedIn:false}))
 
 
@@ -200,9 +186,7 @@ function Account(props) {
         e.preventDefault();
         let newFade={};
 
-        // console.log(fade,Object.keys(fade))
         Object.keys(fade).forEach(elm=>{
-            console.log(elm, e.target.name)
             if(e.target.name===elm){
                     newFade[elm]=true;
             }
@@ -210,13 +194,11 @@ function Account(props) {
             newFade[elm]=false;
 
         })
-        console.log("active",newFade)
 
         setShow(newFade);
     }
     return (
         <Fragment>
-            {console.log(user)}
             {cookies.get("refresh_token")?
 
                 <Fragment>

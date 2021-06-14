@@ -1,10 +1,8 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import React, { Fragment , useState} from "react";
+import React from "react";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
-import Fade from "react-reveal/Fade"
 import Main from "./components/Main";
-import Navbar from  "./components/Navbar";
 import Verify from "./components/Verify";
 import Account from "./components/Account";
 
@@ -12,14 +10,12 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 
 
-const cookies = new Cookies;
+const cookies = new Cookies();
 
 
 axios.interceptors.response.use(response=>{
-  console.log(response);
   return response;
 },async error=>{
-  console.log(error.response);
   if(error.response.status===401 && cookies.get("refresh_token")){
 
     try{
@@ -32,7 +28,6 @@ axios.interceptors.response.use(response=>{
 
     }
     catch(err){
-      console.log(err)
       throw err;
     }
 
@@ -51,7 +46,6 @@ axios.interceptors.request.use(request=>{
     
     request.headers.Authorization= `Bearer ${cookies.get("access_token")}`;
   }
-  console.log(request);
   return request;
 })
 

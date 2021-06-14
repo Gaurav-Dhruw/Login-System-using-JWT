@@ -1,10 +1,9 @@
-import React, { Fragment, useState,useEffect, useContext } from 'react'
+import React, { Fragment, useState,useEffect} from 'react'
 import axios from "axios";
 import Fade from "react-reveal/Fade";
 import Alert from 'react-bootstrap/Alert';
-import {useHistory,Link, Redirect} from "react-router-dom"
+import {Link, Redirect} from "react-router-dom"
 import Cookies from "universal-cookie";
-import {UserContext} from "../context/UserContextProvider";
 import {useSelector , useDispatch} from "react-redux";
 import {action} from "../store/action"
 
@@ -25,38 +24,27 @@ function Login(props) {
 	const  dispatch = useDispatch()
 
 	const cookies = new Cookies();
-	const history= useHistory();
 	const [validation, setValidation] = useState({ email: false, password: false });
 	const [warning, setWarning] = useState({ email: false, password: false })
 	const [alert, setAlert] = useState({ show: false, variant: "danger" });
-	const [redirect, setRedirect] = useState(false);
 
 	const [userData, setUserData] = useState({});
 
 
 	useConstructor(()=>{
-        console.log("inside login constructor")
-
-        // if (cookies.get("refresh_token")) {
-           
-
-        // console.log("inside if");
-		//  setRedirect(true);
-		// 	// history.push("/")
-		// 	}
-
+		
+		if (cookies.get("refresh_token") && !user.loggedIn) {
+			
+			dispatch(action({loggedIn:true}));
+		
+		}
     })
-	// useEffect(()=>{
-	// 	if(cookies.get("refresh_token")){
-	// 		history.push('/account')
-	// 	}
-	// },[user])
+
 
 
 	useEffect(() => {
 		setShow(true);
 
-		return()=>console.log("login will unmount");
 		
 	}, []);
 
@@ -76,28 +64,17 @@ function Login(props) {
 			axios.post("/api/login", userData)
 				.then(res => {
 
-					console.log(res)
 
 					cookies.set("refresh_token", res.data.refresh_token, { path: "/", expires: new Date(new Date().getTime() + 24 * 3600 * 1000) });
 					cookies.set("access_token", res.data.access_token, { path: "/", expires: new Date(new Date().getTime() + 10 * 60 * 1000) });
-					console.log("inside response login, before")
-					// dispatch(action({loggedIn:true,...res.data.user_data}))
-					console.log("inside response login, after dispatch")
-					// setLoginStatus(true);
+					dispatch(action({loggedIn:true,...res.data.user_data}))
 
 					
-						
-						
-					
-
-					// setRedirect(true);
-
+	
 					
 				})
 				.catch(err => {
-					console.log(err);
 					
-					console.log(err.response.status);
 
 					let error = err.response;
 
@@ -115,14 +92,13 @@ function Login(props) {
 	}
 	return (
 		<Fragment>
-			{console.log("inside render login")}
-			{!cookies.get("refresh_token")?
+			{!user.loggedIn?
+			
 		<Fragment>
 	   <div style={{padding:"20px", paddingBottom:"0"}}><Link to="/"><button className="btn btn-dark">Go to Home</button></Link></div>
 			<Fade bottom when={show} duration={600}>
        
 	   <div>
-		   {/* {console.log(validation, "warning", warning)} */}
 		   <div class="signup-form">
 				
 			   <form >

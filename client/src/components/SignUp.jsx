@@ -2,18 +2,12 @@ import React, { Fragment, useState, useEffect } from 'react'
 import axios from "axios";
 import Fade from "react-reveal/Fade";
 import Alert from 'react-bootstrap/Alert';
-import {Link, Redirect, useHistory} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import { validate } from '../assets/js/validate';
 import Cookies from "universal-cookie";
 
 
 
-const useConstructor=(callBack = () => {})=> {
-    const [hasBeenCalled, setHasBeenCalled] = useState(false);
-    if (hasBeenCalled) return;
-    callBack();
-    setHasBeenCalled(true);
-  }
 
 function SignUp(props) {
 	const [show,setShow] = useState(false);
@@ -24,18 +18,7 @@ function SignUp(props) {
 	const [userData, setUserData] = useState({});
 
 	const cookies = new Cookies();
-	const history= useHistory();
 
-
-
-	useConstructor(()=>{
-
-        if (cookies.get("refresh_token")) {
-    
-       
-		}
-
-    })
 
 
 	useEffect(() => {
@@ -54,21 +37,15 @@ function SignUp(props) {
 
 			axios.post("/api/signup", userData)
 				.then(res => {
-					console.log(res)
 					
 					
 					setStatus({ loading: false, show: true, variant: "success", statusMessage:"Email has been sent. Verify it to continue"})
 
 					
-						
-					
-
-					
-				
+	
 					
 				})
 				.catch(err => {
-					console.log(err)
 					setStatus({ loading: false, show: true, variant: "danger", statusMessage: err.response.data.message })
 					
 				})

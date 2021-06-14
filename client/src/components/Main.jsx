@@ -1,7 +1,6 @@
-import React, { useContext,useState } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Cookies from 'universal-cookie';
-import {UserContext} from "../context/UserContextProvider";
 import {action} from "../store/action";
 import {useDispatch,useSelector} from "react-redux";
 import { Fragment } from 'react';
@@ -16,18 +15,20 @@ const useConstructor=(callBack = () => {})=> {
     callBack();
     setHasBeenCalled(true);
   }
+
+
+
+
 function Main() {
 
     const user= useSelector(state=>state.reducer);
     const dispatch = useDispatch();
     const cookies = new Cookies();
-    // const [user,setUser] = useContext(UserContext);
 
 
     useConstructor(()=>{
-        console.log("inside main constructor")
-
-        if (cookies.get("refresh_token")) {
+        
+        if (cookies.get("refresh_token") && !user.loggedIn) {
     
             return dispatch(action({loggedIn:true}));
 		}
