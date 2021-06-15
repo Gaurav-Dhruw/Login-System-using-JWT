@@ -7,12 +7,12 @@ import { Fragment } from 'react';
 import Navbar from "./Navbar"
 
 
-const useConstructor=(callBack = () => {})=> {
-    const [hasBeenCalled, setHasBeenCalled] = useState(false);
-    if (hasBeenCalled) return;
-    callBack();
-    setHasBeenCalled(true);
-  }
+// const useConstructor=(callBack = () => {})=> {
+//     const [hasBeenCalled, setHasBeenCalled] = useState(false);
+//     if (hasBeenCalled) return;
+//     callBack();
+//     setHasBeenCalled(true);
+//   }
 
 function Main() {
 
@@ -21,15 +21,15 @@ function Main() {
     const cookies = new Cookies();
 
 
-    useConstructor(()=>{
+    // useConstructor(()=>{
 
-        if (cookies.get("refresh_token") ) {
+    //     if (cookies.get("refresh_token") ) {
  
-        dispatch(action({loggedIn:true}));
+    //     dispatch(action({loggedIn:true}));
 
-        }
+    //     }
 
-    })
+    // })
 
     return (
         <Fragment>

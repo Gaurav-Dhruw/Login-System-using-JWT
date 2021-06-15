@@ -21,7 +21,7 @@ function Login(props) {
 	const cookies = new Cookies();
 	const [validation, setValidation] = useState({ email: false, password: false });
 	const [warning, setWarning] = useState({ email: false, password: false })
-	const [alert, setAlert] = useState({ show: false, variant: "danger" });
+	const [alert, setAlert] = useState({loading:false, show: false, variant: "danger" });
 
 	const [userData, setUserData] = useState({});
 
@@ -47,7 +47,7 @@ function Login(props) {
 
 
 		if (validation.email === true && validation.password === true) {
-
+			setAlert({...alert,loading:true})
 			axios.post("/api/login", userData)
 				.then(res => {
 
@@ -65,7 +65,7 @@ function Login(props) {
 
 					let error = err.response;
 
-					return setAlert({ ...alert, show: true, message: error.data.error });
+					return setAlert({ ...alert,loading:false, show: true, message: error.data.error });
 
 
 				})
@@ -131,10 +131,15 @@ function Login(props) {
 					   <button type="submit" onClick={submit} class="btn btn-primary btn-lg">Login</button>
 				   </div>
 				   <div className="status-container">
+				   {alert.loading ? <div class="d-flex justify-content-center">
+  <div class="spinner-border" role="status">
+    <span class="visually-hidden"></span>
+  </div>
+</div>:
 
 					   <Alert transition={true} show={alert.show} variant={alert.variant}>
 						   {alert.message}
-					   </Alert>
+					   </Alert>}
 				   </div>
 			   </form>
 			   <div class="text-center"><Link to="/signup" className=" switchBtn" >Create Account</Link></div>
