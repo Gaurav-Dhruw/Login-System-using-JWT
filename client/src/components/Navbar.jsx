@@ -31,7 +31,7 @@ function Navbar(props) {
       <Link class="navbar-brand" to="/">Login Manager</Link>
 
       <ul class="navbar-nav ">
-        {user.loggedIn ? <li class="nav-item dropdown">
+        {cookies.get("refresh_token") && user.loggedIn ? <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="material-icons" style={{ fontSize: "2rem",paddingRight:"8px" }}>&#xe853;</span>{user.user_name}</a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">

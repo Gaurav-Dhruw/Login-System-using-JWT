@@ -7,17 +7,12 @@ import { Fragment } from 'react';
 import Navbar from "./Navbar"
 
 
-
-
 const useConstructor=(callBack = () => {})=> {
     const [hasBeenCalled, setHasBeenCalled] = useState(false);
     if (hasBeenCalled) return;
     callBack();
     setHasBeenCalled(true);
   }
-
-
-
 
 function Main() {
 
@@ -27,12 +22,12 @@ function Main() {
 
 
     useConstructor(()=>{
-        
-        if (cookies.get("refresh_token") && !user.loggedIn) {
-    
-            return dispatch(action({loggedIn:true}));
-		}
-        
+
+        if (cookies.get("refresh_token") ) {
+ 
+        dispatch(action({loggedIn:true}));
+
+        }
 
     })
 
@@ -51,7 +46,7 @@ function Main() {
                 
             </div>
             <div className="get-started">
-                        {user.loggedIn?<Link to="/account"><button type="button" class="btn btn-primary">Go to Account</button></Link>:<div></div>}
+                        {cookies.get("refresh_token") && user.loggedIn?<Link to="/account"><button type="button" class="btn btn-primary">Go to Account</button></Link>:<div></div>}
             </div>
             
 

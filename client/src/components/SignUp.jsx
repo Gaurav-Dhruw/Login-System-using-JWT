@@ -7,7 +7,12 @@ import { validate } from '../assets/js/validate';
 import Cookies from "universal-cookie";
 
 
-
+const useConstructor=(callBack = () => {})=> {
+	const [hasBeenCalled, setHasBeenCalled] = useState(false);
+	if (hasBeenCalled) return;
+	callBack();
+	setHasBeenCalled(true);
+  }
 
 function SignUp(props) {
 	const [show,setShow] = useState(false);
@@ -62,7 +67,7 @@ function SignUp(props) {
 		<Fragment>{!cookies.get("refresh_token")?
 			
 			<Fragment>
-
+				{console.log(cookies.get("refresh_token"))}
 			
 			 <div style={{padding:"20px", paddingBottom:"0"}}><Link to="/"><button className="btn btn-dark">Go to Home</button></Link></div>
 			<Fade top duration={600} when={show}>

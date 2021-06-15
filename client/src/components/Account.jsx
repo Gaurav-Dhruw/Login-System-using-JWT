@@ -10,13 +10,17 @@ import axios from 'axios';
 import {useDispatch,useSelector} from "react-redux";
 import {action} from "../store/action";
 
+
+
 const useConstructor=(callBack = () => {})=> {
-    const [hasBeenCalled, setHasBeenCalled] = useState(false);
-    if (hasBeenCalled) return;
-    callBack();
-    setHasBeenCalled(true);
+	const [hasBeenCalled, setHasBeenCalled] = useState(false);
+	if (hasBeenCalled) return;
+	callBack();
+	setHasBeenCalled(true);
   }
 
+
+  
 function Account(props) {
     const user = useSelector(state => state.reducer);
   const dispatch = useDispatch();
@@ -32,18 +36,17 @@ function Account(props) {
 
     const cookies = new Cookies();
 
-    useConstructor(()=>{
-        if (cookies.get("refresh_token") && !user.loggedIn) {
 
-            return dispatch(action({loggedIn:true}))
+    
+	useConstructor(()=>{
+
+        if (cookies.get("refresh_token") ) {
+ 
+        dispatch(action({loggedIn:true}));
 
         }
 
-        
-
     })
-    
-    
     
     useEffect(() => {
 

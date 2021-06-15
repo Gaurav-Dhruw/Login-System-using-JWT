@@ -11,12 +11,7 @@ import {action} from "../store/action"
 import { validate } from '../assets/js/validate';
 
 
-const useConstructor=(callBack = () => {})=> {
-    const [hasBeenCalled, setHasBeenCalled] = useState(false);
-    if (hasBeenCalled) return;
-    callBack();
-    setHasBeenCalled(true);
-  }
+
 
 function Login(props) {
 	const [show,setShow]=useState(false);
@@ -31,16 +26,8 @@ function Login(props) {
 	const [userData, setUserData] = useState({});
 
 
-	useConstructor(()=>{
-		
-		if (cookies.get("refresh_token") && !user.loggedIn) {
-			
-			dispatch(action({loggedIn:true}));
-		
-		}
-    })
-
-
+	
+	
 
 	useEffect(() => {
 		setShow(true);
@@ -92,7 +79,11 @@ function Login(props) {
 	}
 	return (
 		<Fragment>
-			{!user.loggedIn?
+
+
+{/* {console.log(cookies.get("refresh_token"), user.loggedIn)} */}
+
+			{!cookies.get("refresh_token")?
 			
 		<Fragment>
 	   <div style={{padding:"20px", paddingBottom:"0"}}><Link to="/"><button className="btn btn-dark">Go to Home</button></Link></div>

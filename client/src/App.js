@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import React from "react";
+import React, { useState } from "react";
+import {useDispatch, useSelector} from "react-redux";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import Main from "./components/Main";
@@ -8,6 +9,8 @@ import Account from "./components/Account";
 
 import axios from "axios";
 import Cookies from "universal-cookie";
+import { Fragment } from "react";
+import {action} from "./store/action"
 
 
 const cookies = new Cookies();
@@ -49,15 +52,62 @@ axios.interceptors.request.use(request=>{
   return request;
 })
 
+const useConstructor=(callBack = () => {})=> {
+  const [hasBeenCalled, setHasBeenCalled] = useState(false);
+  if (hasBeenCalled) return;
+  callBack();
+  setHasBeenCalled(true);
+}
 
 
 
 
 function App() {
+  const [loading,setLoading]= useState(true);
+  const user= useSelector(state=>state.reducer);
+	const  dispatch = useDispatch();
+
+  useConstructor(()=>{
+
+    console.log("INSISDE APP CONSTRUCTOR")
+		
+		if (cookies.get("refresh_token") ) {
+
+      axios.get("/api/protected/account")
+      .then(res=>{
+        console.log(res)
+
+        dispatch(action({loggedIn:true,...res.data}));
+        setLoading(false)
+
+      }).catch(err=>{
+        console.log(err)
+
+      })
+
+			
+		
+		}
+
+    else{
+      setLoading(false)
+    }
+    })
 
   
   return (
-  <Router>
+    <Router>
+  
+  <Fragment>{loading?
+  <div class="d-flex justify-content-center" style={{height:"100vh", alignItems:"center"}}>
+  <div class="spinner-border text-light" style={{ width: "3rem", height: "3rem" }} role="status">
+    <span class="visually-hidden" ></span>
+  </div>
+  
+    
+</div>:
+
+
     <Switch>
     
 
@@ -105,6 +155,12 @@ function App() {
 
   
   </Switch>
+}
+
+
+ 
+
+  </Fragment>
   </Router>
   
   );
