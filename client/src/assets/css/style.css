@@ -29,9 +29,11 @@ body {
 .signup-form h2 {
 	color: #333;
 	font-weight: bold;
-	margin-top: 0;
+	margin-top: 0px;
+	margin-bottom: 40px
 }
 .signup-form hr {
+	display: none;
 	margin: 0 -30px 20px;
 }
 .signup-form .form-group {
@@ -466,6 +468,11 @@ a{
 	.account{
 	margin-top:170px;
 
+	}
+
+	.signup-form h2 {
+	
+		margin-top: 10px;
 	}
 	.account-details{
 		padding: 30px 0;
