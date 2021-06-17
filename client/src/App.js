@@ -99,9 +99,9 @@ function App() {
     <Router>
   
   <Fragment>{loading?
-  <div class="d-flex justify-content-center" style={{height:"100vh", alignItems:"center"}}>
-  <div class="spinner-border text-light" style={{ width: "3rem", height: "3rem" }} role="status">
-    <span class="visually-hidden" ></span>
+  <div className="d-flex justify-content-center" style={{height:"100vh", alignItems:"center"}}>
+  <div className="spinner-border text-light" style={{ width: "3rem", height: "3rem" }} role="status">
+    <span className="visually-hidden" ></span>
   </div>
   
     

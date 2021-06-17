@@ -46,7 +46,7 @@ function Main() {
                 
             </div>
             <div className="get-started">
-                        {cookies.get("refresh_token") && user.loggedIn?<Link to="/account"><button type="button" class="btn btn-primary">Go to Account</button></Link>:<div></div>}
+                        {cookies.get("refresh_token") && user.loggedIn?<Link to="/account"><button type="button" className="btn btn-primary">Go to Account</button></Link>:<div></div>}
             </div>
             
 

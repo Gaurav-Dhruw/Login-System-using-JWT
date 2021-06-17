@@ -86,24 +86,24 @@ function Login(props) {
 			{!cookies.get("refresh_token")?
 			
 		<Fragment>
-	   <div style={{padding:"20px", paddingBottom:"0"}}><Link to="/"><button className="btn btn-dark">Go to Home</button></Link></div>
+	   <div className="go-back-btn" style={{padding:"20px"}}><Link to="/"><button className="btn btn-dark">Go to Home</button></Link></div>
 			<Fade bottom when={show} duration={600}>
        
-	   <div>
-		   <div class="signup-form">
+	   <div  className="form-container">
+		   <div className="signup-form">
 				
 			   <form >
 				   <h2>Login</h2>
 
 				   <hr />
-				   <div class="form-group">
-					   <div class="input-group">
-						   <div class="input-group-prepend">
-							   <span class="input-group-text">
-								   <i class="fa fa-paper-plane"></i>
+				   <div className="form-group">
+					   <div className="input-group">
+						   <div className="input-group-prepend">
+							   <span className="input-group-text">
+								   <i className="fa fa-paper-plane"></i>
 							   </span>
 						   </div>
-						   <input type="email" onChange={handleInput} class="form-control" name="email" placeholder="Email Address" required="required" />
+						   <input type="email" onChange={handleInput} className="form-control" name="email" placeholder="Email Address" required="required" />
 					   </div>
 					   <Fade duration={500} top when={warning.email}>
 
@@ -111,14 +111,14 @@ function Login(props) {
 					   </Fade>
 				   </div>
 
-				   <div class="form-group">
-					   <div class="input-group">
-						   <div class="input-group-prepend">
-							   <span class="input-group-text">
-								   <i class="fa fa-lock"></i>
+				   <div className="form-group">
+					   <div className="input-group">
+						   <div className="input-group-prepend">
+							   <span className="input-group-text">
+								   <i className="fa fa-lock"></i>
 							   </span>
 						   </div>
-						   <input type="text" onChange={handleInput} class="form-control" name="password" placeholder="Password" required="required" />
+						   <input type="text" onChange={handleInput} className="form-control" name="password" placeholder="Password" required="required" />
 					   </div>
 					   <Fade duration={500} top when={warning.password}>
 
@@ -127,13 +127,13 @@ function Login(props) {
 				   </div>
 
 
-				   <div class="form-group">
-					   <button type="submit" onClick={submit} class="btn btn-primary btn-lg">Login</button>
+				   <div className="form-group">
+					   <button type="submit" onClick={submit} className="btn btn-primary btn-lg">Login</button>
 				   </div>
 				   <div className="status-container">
-				   {alert.loading ? <div class="d-flex justify-content-center">
-  <div class="spinner-border" role="status">
-    <span class="visually-hidden"></span>
+				   {alert.loading ? <div className="d-flex justify-content-center">
+  <div className="spinner-border" role="status">
+    <span className="visually-hidden"></span>
   </div>
 </div>:
 
@@ -142,7 +142,7 @@ function Login(props) {
 					   </Alert>}
 				   </div>
 			   </form>
-			   <div class="text-center"><Link to="/signup" className=" switchBtn" >Create Account</Link></div>
+			   <div className="text-center"><Link to="/signup" className=" switchBtn" >Create Account</Link></div>
 		   </div>
 
 

@@ -89,17 +89,17 @@ const dispatch = useDispatch();
   return (
     <div className="verify-cont">
 
-{state.loading ? <div class="d-flex justify-content-center">
-  <div class="spinner-border text-light" style={{ width: "3rem", height: "3rem" }} role="status">
-    <span class="visually-hidden" ></span>
+{state.loading ? <div className="d-flex justify-content-center">
+  <div className="spinner-border text-light" style={{ width: "3rem", height: "3rem" }} role="status">
+    <span className="visually-hidden" ></span>
   </div>
 </div>
 
   :<Fragment>{!redirect?<Fragment>
     
-    {state.verified ?<div class="alert alert-info" role="alert">
+    {state.verified ?<div className="alert alert-info" role="alert">
     Your email has been verified. Redirecting to Login Manager in {redirectTime}
-  </div>:<div class="alert alert-danger" role="alert">
+  </div>:<div className="alert alert-danger" role="alert">
     Verification link is invalid
   </div>}
     </Fragment>:<Redirect to="/account"/>}

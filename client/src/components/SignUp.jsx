@@ -7,12 +7,12 @@ import { validate } from '../assets/js/validate';
 import Cookies from "universal-cookie";
 
 
-const useConstructor=(callBack = () => {})=> {
-	const [hasBeenCalled, setHasBeenCalled] = useState(false);
-	if (hasBeenCalled) return;
-	callBack();
-	setHasBeenCalled(true);
-  }
+// const useConstructor=(callBack = () => {})=> {
+// 	const [hasBeenCalled, setHasBeenCalled] = useState(false);
+// 	if (hasBeenCalled) return;
+// 	callBack();
+// 	setHasBeenCalled(true);
+//   }
 
 function SignUp(props) {
 	const [show,setShow] = useState(false);
@@ -69,37 +69,37 @@ function SignUp(props) {
 			<Fragment>
 				{console.log(cookies.get("refresh_token"))}
 			
-			 <div style={{padding:"20px", paddingBottom:"0"}}><Link to="/"><button className="btn btn-dark">Go to Home</button></Link></div>
-			<Fade top duration={600} when={show}>
-			<div>
-			<div class="signup-form">
+			 <div className="go-back-btn"  style={{padding:"20px"}}><Link to="/"><button className="btn btn-dark">Go to Home</button></Link></div>
+			<Fade top duration={600} when={show} >
+			<div className="form-container">
+			<div className="signup-form">
 
 				<form >
 					<h2>Sign Up</h2>
-					<p>Please fill in this form to create an account!</p>
+					{/* <p>Please fill in this form to create an account!</p> */}
 					<hr />
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">
-									<span class="fa fa-user"></span>
+					<div className="form-group">
+						<div className="input-group">
+							<div className="input-group-prepend">
+								<span className="input-group-text">
+									<span className="fa fa-user"></span>
 								</span>
 							</div>
-							<input type="text" onChange={handleInput} class="form-control" name="user_name" placeholder="Username" required="required" />
+							<input type="text" onChange={handleInput} className="form-control" name="user_name" placeholder="Username" required="required" />
 						</div>
 						<Fade duration={500} top when={warning.user_name}>
 							<div className="warning">user-name must be atleast 5 char long</div>
 
 						</Fade>
 					</div>
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">
-									<i class="fa fa-paper-plane"></i>
+					<div className="form-group">
+						<div className="input-group">
+							<div className="input-group-prepend">
+								<span className="input-group-text">
+									<i className="fa fa-paper-plane"></i>
 								</span>
 							</div>
-							<input type="email" onChange={handleInput} class="form-control" name="email" placeholder="Email Address" required="required" />
+							<input type="email" onChange={handleInput} className="form-control" name="email" placeholder="Email Address" required="required" />
 
 						</div>
 						<Fade duration={500} top when={warning.email}>
@@ -107,14 +107,14 @@ function SignUp(props) {
 							<div className="warning">email is required / invalid</div>
 						</Fade>
 					</div>
-					<div class="form-group">
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">
-									<i class="fa fa-lock"></i>
+					<div className="form-group">
+						<div className="input-group">
+							<div className="input-group-prepend">
+								<span className="input-group-text">
+									<i className="fa fa-lock"></i>
 								</span>
 							</div>
-							<input type="text" onChange={handleInput} class="form-control" name="password" placeholder="Password" required="required" />
+							<input type="text" onChange={handleInput} className="form-control" name="password" placeholder="Password" required="required" />
 
 						</div>
 						<Fade duration={500} top when={warning.password}>
@@ -122,26 +122,26 @@ function SignUp(props) {
 							<div className="warning">min 8 char, must contain number and special character </div>
 						</Fade>
 					</div>
-					{/* <div class="form-group">
-						<div class="input-group">
-							<div class="input-group-prepend">
-								<span class="input-group-text">
-									<i class="fa fa-lock"></i>
-									<i class="fa fa-check"></i>
+					{/* <div className="form-group">
+						<div className="input-group">
+							<div className="input-group-prepend">
+								<span className="input-group-text">
+									<i className="fa fa-lock"></i>
+									<i className="fa fa-check"></i>
 								</span>
 							</div>
-							<input type="text" class="form-control" name="confirm_password" placeholder="Confirm Password" required="required" />
+							<input type="text" className="form-control" name="confirm_password" placeholder="Confirm Password" required="required" />
 						</div>
 					</div> */}
 
-					<div class="form-group">
-						<button type="submit" onClick={submit} class="btn btn-primary btn-lg">Sign Up</button>
+					<div className="form-group">
+						<button type="submit" onClick={submit} className="btn btn-primary btn-lg">Sign Up</button>
 					</div>
 					<div className="status-container">
 
-						{status.loading ? <div class="d-flex justify-content-center">
-  <div class="spinner-border" role="status">
-    <span class="visually-hidden"></span>
+						{status.loading ? <div className="d-flex justify-content-center">
+  <div className="spinner-border" role="status">
+    <span className="visually-hidden"></span>
   </div>
 </div>:
 							<Alert transition={true} show={status.show} variant={status.variant}>
@@ -154,7 +154,7 @@ function SignUp(props) {
 
 
 				</form>
-				<div class="text-center">Already have an account? <Link to="/login" className="switchBtn" >Login here</Link></div>
+				<div className="text-center">Already have an account? <Link to="/login" className="switchBtn" >Login here</Link></div>
 			</div>
 			</div>
 			</Fade></Fragment>: <Redirect to='/account'></Redirect>}

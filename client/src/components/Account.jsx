@@ -129,9 +129,9 @@ function Account(props) {
             <button className="btn btn-primary" type="submit" onClick={changePassword}>Change Passowrd</button>
             <div className="status-container">
 
-						{status.loading ? <div class="d-flex justify-content-center">
-  <div class="spinner-border" role="status">
-    <span class="visually-hidden"></span>
+						{status.loading ? <div className="d-flex justify-content-center">
+  <div className="spinner-border" role="status">
+    <span className="visually-hidden"></span>
   </div>
 </div>:
 							<Alert transition={true} show={status.show} variant={status.variant}>
@@ -147,9 +147,9 @@ function Account(props) {
         else if(fade.showA){
     return (<Fade duration={1000}>
         <div className="account-container">
-            {loading ? <div class="d-flex justify-content-center">
-                <div class="spinner-border text-primary" role="status">
-                    <span class="visually-hidden"></span>
+            {loading ? <div className="d-flex justify-content-center">
+                <div className="spinner-border text-primary" role="status">
+                    <span className="visually-hidden"></span>
                 </div>
             </div> : <div className="account-details">
                 <p>User: {user.user_name}</p>
@@ -164,12 +164,12 @@ function Account(props) {
 
     return (<Fade duration={1000}>
         <div className="delete-container">
-        <button type="button" onClick={deleteAccount} class="btn btn-danger">Confirm Delete</button>
+        <button type="button" onClick={deleteAccount} className="btn btn-danger">Confirm Delete</button>
         <div className="status-container">
 
-						{deleteStatus.loading ? <div class="d-flex justify-content-center">
-  <div class="spinner-border" role="status">
-    <span class="visually-hidden"></span>
+						{deleteStatus.loading ? <div className="d-flex justify-content-center">
+  <div className="spinner-border" role="status">
+    <span className="visually-hidden"></span>
   </div>
 </div>:
 							<Alert transition={true} show={deleteStatus.show} variant={deleteStatus.variant}>
@@ -218,13 +218,13 @@ function Account(props) {
                         <div className="display">
                             <div className="btn-container">
 
-                                <button onClick={(e)=>{handleFade(e)}} name="showA"type="button" class="btn btn-light">Account Details</button>
+                                <button onClick={(e)=>{handleFade(e)}} name="showA"type="button" className="btn btn-light">Account Details</button>
 
 
-                                <button type="button" name="showP" onClick={handleFade} class="btn btn-light">
+                                <button type="button" name="showP" onClick={handleFade} className="btn btn-light">
                                     Change Password
                 </button>
-                                <button type="button" name="showD" onClick={handleFade} class="btn btn-light">
+                                <button type="button" name="showD" onClick={handleFade} className="btn btn-light">
                                     Delete Account
                 </button>
                             </div>

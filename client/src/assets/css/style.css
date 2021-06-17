@@ -93,6 +93,11 @@ body {
 	font-size: .8rem;
 	padding-top: 5px;
 }
+.form-container{
+	display: flex;
+	justify-content: center;
+	width:100%;
+}
 
 .switchBtn{
 
@@ -141,7 +146,7 @@ body {
 
 
 .navbar-brand{
-	font-size: 2.2rem !important;
+	font-size: 2.2rem ;
 	color: white !important;
 }
 .navbar{
@@ -154,7 +159,7 @@ body {
 .signup-btn{
 	border-radius: 5px;
 	display: flex;
-	min-width: 115px;
+	/* min-width: 115px; */
 	justify-content: space-between;
 	align-items: center;
 }
@@ -162,7 +167,7 @@ body {
 .login-btn{
 	border-radius: 5px;
 	display: flex;
-	min-width: 100px;
+	/* min-width: 100px; */
 	justify-content: space-between;
 	align-items: center;
 }
@@ -197,7 +202,7 @@ body {
 /* Main Section */
 .main-section{
 	height: 100vh;
-	padding: 10vh 20vh;
+	padding: 10vh 10px;
 }
 .header{
 	display: flex;
@@ -365,10 +370,13 @@ a{
 		margin:10px auto;
 	
 	}
+	.navbar-brand{
+		margin: 10px !important;
+	}
 
 }
 
-@media(max-width:630px){
+@media(max-width:700px){
 	.display{
 		background: rgb(226, 219, 219);
 		color:rgb(61, 57, 57);
@@ -391,12 +399,19 @@ a{
 		margin-bottom:20px ;
 		justify-content: space-evenly;
 	}
+	.navbar{
+		padding: 0 20px !important;
+	}
 
 }
 
 @media(max-width:590px){
+
+	.navbar{
+		flex-direction: column;
+	}
 	.navbar-brand{
-		font-size: 1.8rem !important;
+		font-size: 2.2rem ;
 	}
 	.navbar{
 		padding: 5px 30px 5px 50px;
@@ -424,9 +439,30 @@ a{
 }
 
 @media(max-width:430px){
-	.navbar{
-		flex-direction: column;
+	.navbar-brand{
+		font-size: 2rem;
 	}
+	.go-back-btn{
+		padding: 15px 0 10px 0 !important;
+	}
+
+	.form-container{
+		display: flex;
+		justify-content: center;
+		width:100%;
+		margin: 15px 0;
+	}
+	.signup-form{
+		width: 90%;
+	}
+	.signup-form form{
+		padding: 15px 
+
+	}
+	.header h1{
+		font-size: 2.2rem;
+	}
+	
 	.account{
 	margin-top:170px;
 

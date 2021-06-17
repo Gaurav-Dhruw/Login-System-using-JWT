@@ -27,27 +27,27 @@ function Navbar(props) {
 
 
   return (
-    <nav class="navbar  navbar-expand-lg navbar-light bg-light">
-      <Link class="navbar-brand" to="/">Login Manager</Link>
+    <nav className="navbar  navbar-expand-lg navbar-light bg-light">
+      <Link className="navbar-brand" to="/">Login Manager</Link>
 
-      <ul class="navbar-nav ">
-        {cookies.get("refresh_token") ? <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="material-icons" style={{ fontSize: "2rem",paddingRight:"8px" }}>&#xe853;</span>{user.user_name}</a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a onClick={logout} class="dropdown-item" href="#" style={{display: "flex",
-  }} ><span class="material-icons"  style={{paddingRight:"8px"}}>&#xe9ba;
+      <ul className="navbar-nav ">
+        {cookies.get("refresh_token") ? <li className="nav-item dropdown">
+          <a className="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span className="material-icons" style={{ fontSize: "2rem",paddingRight:"8px" }}>&#xe853;</span>{user.user_name}</a>
+          <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a onClick={logout} className="dropdown-item" href="#" style={{display: "flex",
+  }} ><span className="material-icons"  style={{paddingRight:"8px"}}>&#xe9ba;
 </span>Logout</a>
           </div>
         </li> : <Fragment>
-          <li class="nav-item">
-            <Link to="/login"><button type="button" class="login-btn btn btn-primary"><span class="material-icons">
+          <li className="nav-item">
+            <Link to="/login"><button type="button" className="login-btn btn btn-primary"><span className="material-icons" style={{paddingRight:"8px" }}>
               &#xea77;
 </span>Login</button></Link>
           </li>
-          <li class="nav-item">
+          <li className="nav-item">
 
-            <Link to="/signup"><button className="btn btn-primary signup-btn"><span class="material-icons">&#xe7fe;</span>
+            <Link to="/signup"><button className="btn btn-primary signup-btn"><span className="material-icons" style={{paddingRight:"8px" }}>&#xe7fe;</span>
 Sign Up </button>
             </Link>
           </li>
